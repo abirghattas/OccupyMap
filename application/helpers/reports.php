@@ -378,8 +378,12 @@ class reports_Core {
 					$strokewidth = (isset($item->strokewidth) AND (float) $item->strokewidth) ? (float) $item->strokewidth : "2.5";
 					if ($geometry)
 					{
+					  
+					  $sql = "INSERT INTO ".Kohana::config('database.default.table_prefix')."geometry "
+            ."(incident_id, geometry, geometry_label, geometry_comment, geometry_color, geometry_strokewidth) "
+            ."VALUES(".$incident->id.", GeomFromText('".$geometry."'), '".$label."', '".$comment."', '".$color."', ".$strokewidth.")";
 						// 	Format the SQL string
-						$sql = sprintf($sql, $incident->id, $geometry, $label, $comment, $color, $strokewidth);
+//						$sql = sprintf($sql, $incident->id, $geometry, $label, $comment, $color, $strokewidth);
 						
 						// Execute the query
 						$db->query($sql);
@@ -455,6 +459,7 @@ class reports_Core {
 		// c. Photos
 		$filenames = upload::save('incident_photo');
 		$i = 1;
+		if (is_array($filenames)) {
 		foreach ($filenames as $filename)
 		{
 			$new_filename = $incident->id . "_" . $i . "_" . time();
@@ -489,7 +494,7 @@ class reports_Core {
 			$photo->media_date = date("Y-m-d H:i:s",time());
 			$photo->save();
 			$i++;
-		}
+		}}
 	}
 	
 	/**
@@ -575,7 +580,6 @@ class reports_Core {
 		
 		// Fetch the URL data into a local variable
 		$url_data = array_merge($_GET);
-		
 		// Check if some parameter values are separated by "," except the location bounds
 		$exclude_params = array('c' => '', 'v' => '', 'm' => '', 'mode' => '', 'sw'=> '', 'ne'=> '');
 		foreach ($url_data as $key => $value)
@@ -708,8 +712,8 @@ class reports_Core {
 		// 
 		if (isset($url_data['from']) AND isset($url_data['to']))
 		{
-			$date_from = date('Y-m-d', strtotime($url_data['from']));
-			$date_to = date('Y-m-d', strtotime($url_data['to']));
+			$date_from = date('Y-m-d H:i:s', strtotime($url_data['from']));
+			$date_to = date('Y-m-d H:i:s', strtotime($url_data['to']));
 			
 			array_push(self::$params, 
 				'i.incident_date >= "'.$date_from.'"',

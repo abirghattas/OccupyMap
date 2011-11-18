@@ -139,7 +139,7 @@ class Reports_Controller extends Main_Controller {
 		
 		// Fetch all incidents
 		$all_incidents = reports::fetch_incidents();
-		
+	  
 		// Pagination
 		$pagination = new Pagination(array(
 				'style' => 'front-end-reports',
@@ -147,10 +147,8 @@ class Reports_Controller extends Main_Controller {
 				'items_per_page' => (int) Kohana::config('settings.items_per_page'),
 				'total_items' => $all_incidents->count()
 				));
-
 		// Reports
 		$incidents = Incident_Model::get_incidents(reports::$params, $pagination);
-		
 		// Swap out category titles with their proper localizations using an array (cleaner way to do this?)
 		$localized_categories = array();
 		foreach ($incidents as $incident)
@@ -217,7 +215,6 @@ class Reports_Controller extends Main_Controller {
 	{
 		$this->template = "";
 		$this->auto_render = FALSE;
-		
 		if ($_GET)
 		{
 			$report_listing_view = $this->_get_report_listing_view();
