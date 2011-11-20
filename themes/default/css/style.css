@@ -2151,8 +2151,7 @@ p.r_date {
         
 div.r_description { margin-bottom:5px; width:450px; }
 
-/* Changed to display location from report>location field */
-#rb_list-view p.r_location { display:block; }
+#rb_list-view p.r_location { display:none; }
 
 p.r_location a {
     color:#828784; 
