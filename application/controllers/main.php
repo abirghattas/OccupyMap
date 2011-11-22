@@ -315,12 +315,22 @@ class Main_Controller extends Template_Controller {
 		$this->template->content->phone_array = $phone_array;
 
         // Get The START, END and Incident Dates
+
         $startDate = "";
 		$endDate = "";
 		$display_startDate = 0;
 		$display_endDate = 0;
 
 		$db = new Database();
+
+            // Added by Chaz
+            // From: https://github.com/jetherton/Ushahidi_Web/commit/bd21a1aa9008091ec5d17aa91282126da7ef8275
+            //run some custom events for the timeline plugin
+
+                Event::run('ushahidi_filter.active_startDate', $active_startDate);
+                Event::run('ushahidi_filter.active_endDate', $active_endDate);
+                Event::run('ushahidi_filter.active_month', $active_month);
+
         // Next, Get the Range of Years
 		$query = $db->query('SELECT DATE_FORMAT(incident_date, \'%Y-%c\') AS dates FROM '.$this->table_prefix.'incident WHERE incident_active = 1 GROUP BY DATE_FORMAT(incident_date, \'%Y-%c\') ORDER BY incident_date');
 
