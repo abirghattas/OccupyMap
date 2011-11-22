@@ -65,6 +65,13 @@ class youtube {
 					$embed_code = $this->_embed_code($matches2[2]);
 					$text = str_replace($match, $embed_code, $text);
 				}
+				// Find All YouTube short-links
+				// @TOD: fix
+        // if(preg_match('/youtu\.be\/([\w\-]+)/', $match, $matches3) )
+        // {
+        //  $embed_code = $this->_embed_code($matches3[2]);
+        //  $text = str_replace($match, $embed_code, $text);
+        // }
 			}
 		}
 		
