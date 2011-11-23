@@ -4,6 +4,11 @@
 		<?php if($site_submit_report_message != '') { ?>
 			<div class="green-box" style="margin: 25px 25px 0px 25px">
 				<h3><?php echo $site_submit_report_message; ?></h3>
+				<p>
+				    To embed a youtube video, just drop in a link like this:
+				<br/>
+				    http://www.youtube.com/watch?v=XCZLhEOJ8XA
+				</p>
 			</div>
 		<?php } ?>
 
@@ -313,3 +318,8 @@
 		<!-- end report form block -->
 	</div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("div.report_row").show();
+    })
+</script>
