@@ -27,13 +27,14 @@ class VideoEmbed
 		
 		// Array of the supportted video services
 		$services = array(
-			"youtube" => "http://www.youtube.com/watch?v=", 
+			"youtube" => "http://www.youtube.com/watch?v=",
 			"google" => "http://video.google.com/videoplay?docid=-",
 			"revver" => "http://one.revver.com/watch/", 
 			"metacafe" => "http://www.metacafe.com/watch/", 
 			"lieveleak" => "http://www.liveleak.com/view?i=",
 			"dotsub" => "http://dotsub.com/media/",
-			"vimeo" => "http://vimeo.com/"
+			"vimeo" => "http://vimeo.com/",
+			"youtube-shortlink" => "http://youtu.be/"
 		);
 		
 		// Get the video URL
@@ -60,7 +61,7 @@ class VideoEmbed
 		}
 		
 		// Print the HTML embed code depending on the video service
-		if ($service_name == "youtube")
+		if ($service_name == "youtube" || $service_name == "youtube-shortlink")
 		{
 			// Check for autoplay
 			$you_auto = ($auto == "play")? "&autoplay=1" : "";
