@@ -54,41 +54,9 @@ class youtube {
 	 */
 	private function _auto_embed($text)
 	{
-		// Finds all http/https/ftp/ftps links that are not part of an existing html anchor
-		if (preg_match_all('~\b(?<!href="|">)(?:ht|f)tps?://\S+(?:/|\b)~i', $text, $matches))
-		{
-			foreach ($matches[0] as $match)
-			{
-				// Find All YouTube links
-				if(preg_match('/youtube\.com\/(v\/|watch\?v=)([\w\-]+)/', $match, $matches2))
-				{
-					$embed_code = $this->_embed_code($matches2[2]);
-					$text = str_replace($match, $embed_code, $text);
-				}
-				// Find All YouTube short-links
-				// @TOD: fix
-        // if(preg_match('/youtu\.be\/([\w\-]+)/', $match, $matches3) )
-        // {
-        //  $embed_code = $this->_embed_code($matches3[2]);
-        //  $text = str_replace($match, $embed_code, $text);
-        // }
-			}
-		}
-		
-		return $text;
-	}
-	
-	private function _embed_code($id = NULL)
-	{
-		if ($id)
-		{
-			return '<div style="margin:15px 0 15px 0"><object width="520" height="340"><param name="movie" value="http://www.youtube.com/v/'.$id.'&hl=en&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/'.$id.'&hl=en&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="520" height="340"></embed></object></div>';
-
-		}
-		else
-		{
-			return "";
-		}
+	    //using the video embed library
+	    $video_embed = new VideoEmbed();
+	    return  $video_embed->embed($text);
 	}
 }
 
