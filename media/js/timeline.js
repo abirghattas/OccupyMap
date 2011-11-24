@@ -289,10 +289,11 @@
 		this.playRainDrops = function()
 		{
 			this.graphData = this.graphData || gTimelineData;
-
+      //pull value of timeline from a dropdown setting
+      var timeInterval = $('#timeInterval').attr('value');
 			var plotData = this.graphData;
-			gPlayEndDate = gStartTime.getTime()/1000 + (this.playCount * 60*60*24);
-			gPlayStartDate = gPlayEndDate - (60*60*24);
+			gPlayEndDate = gStartTime.getTime()/1000 + (this.playCount * timeInterval);
+			gPlayStartDate = gPlayEndDate - (timeInterval);
 			var playEndDateTime = new Date(gPlayEndDate * 1000);
 			var data = this.filteredData(new Date(gPlayEndDate * 1000));
 
