@@ -1,13 +1,20 @@
 <!-- main body -->
 <div id="main" class="clearingfix">
 	<div id="mainmiddle" class="floatbox withright">
-
+        <div class="green-box">
+           <h3>
+            <a href="<?=url::site()?>/city/none"><strong>NYC</strong></a> |
+            <strong>Support Occupations Under Threat of Eviction: </strong><a href="<?=url::site()?>/city/local/Philadelphia">Philadelphia</a> |
+            <a href="<?=url::site()?>/city/local/Los Angeles">Los Angeles</a>
+            </h3>
+        </div>
+        <!--
 	<?php if($site_message != '') { ?>
 		<div class="green-box">
 			<h3><?php echo $site_message; ?></h3>
 		</div>
 	<?php } ?>
-
+        -->
 		<!-- right column -->
 		<div id="right" class="clearingfix">
 	

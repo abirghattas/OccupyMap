@@ -222,9 +222,17 @@ class Reporters_Controller extends Admin_Controller
         $this->template->map_enabled = TRUE;
         $this->template->js = new View('admin/reporters_js');
 		$this->template->js->default_map = Kohana::config('settings.default_map');
-		$this->template->js->default_zoom = Kohana::config('settings.default_zoom');
-		$this->template->js->latitude = Kohana::config('settings.default_lat');
-		$this->template->js->longitude = Kohana::config('settings.default_lon');
+        if (is_array($this->session->get('city_local'))) {
+            $city = $this->session->get('city_local');
+            $this->template->js->default_zoom = 12;
+    		$this->template->js->latitude = $city['city_lat'];
+    		$this->template->js->longitude = $city['city_lon'];
+        } else {
+    		$this->template->js->default_zoom = Kohana::config('settings.default_zoom');
+    		$this->template->js->latitude = Kohana::config('settings.default_lat');
+    		$this->template->js->longitude = Kohana::config('settings.default_lon');
+        }
+
 		$this->template->js->form_error = $form_error;
 	}
 }

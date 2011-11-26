@@ -394,8 +394,14 @@ class Reports_Controller extends Main_Controller {
 		$this->themes->js->default_zoom = Kohana::config('settings.default_zoom');
 		if (!$form['latitude'] OR !$form['latitude'])
 		{
-			$this->themes->js->latitude = Kohana::config('settings.default_lat');
-			$this->themes->js->longitude = Kohana::config('settings.default_lon');
+	    	if (is_array($this->session->get('city_local'))) {
+                $city = $this->session->get('city_local');
+            	$this->themes->js->latitude = $city['city_lat'];
+        		$this->themes->js->longitude = $city['city_lon'];
+            } else {
+        		$this->themes->js->latitude = Kohana::config('settings.default_lat');
+        		$this->themes->js->longitude = Kohana::config('settings.default_lon');
+            }
 		}
 		else
 		{

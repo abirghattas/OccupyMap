@@ -309,8 +309,15 @@ class Reports_Controller extends Mobile_Controller {
 		$this->template->header->js = new View('mobile/reports_submit_js');
 		if (!$form['latitude'] || !$form['latitude'])
 		{
-			$this->template->header->js->latitude = Kohana::config('settings.default_lat');
-			$this->template->header->js->longitude = Kohana::config('settings.default_lon');
+            	if (is_array($this->session->get('city_local'))) {
+                    $city = $this->session->get('city_local');
+                	$this->template->header->js->latitude = $city['city_lat'];
+            		$this->template->header->js->longitude = $city['city_lon'];
+                } else {
+            		$this->template->header->js->latitude = Kohana::config('settings.default_lat');
+            		$this->template->header->js->longitude = Kohana::config('settings.default_lon');
+                }
+
 		}else{
 			$this->template->header->js->latitude = $form['latitude'];
 			$this->template->header->js->longitude = $form['longitude'];

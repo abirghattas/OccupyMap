@@ -167,7 +167,6 @@ class Main_Controller extends Template_Controller {
     {
         $this->template->header->this_page = 'home';
         $this->template->content = new View('main');
-
 		// Cacheable Main Controller
 		$this->is_cachable = TRUE;
 
@@ -476,11 +475,18 @@ class Main_Controller extends Template_Controller {
 		$this->themes->js->latFrom = $latFrom;
 		$this->themes->js->lonTo = $lonTo;
 		$this->themes->js->latTo = $latTo;
+        if (is_array($this->session->get('city_local'))) {
+            $city = $this->session->get('city_local');
+            $this->themes->js->default_zoom = 12;
+    		$this->themes->js->latitude = $city['city_lat'];
+    		$this->themes->js->longitude = $city['city_lon'];
+        } else {
+    		$this->themes->js->default_zoom = Kohana::config('settings.default_zoom');
+    		$this->themes->js->latitude = Kohana::config('settings.default_lat');
+    		$this->themes->js->longitude = Kohana::config('settings.default_lon');
+        }
 
 		$this->themes->js->default_map = Kohana::config('settings.default_map');
-		$this->themes->js->default_zoom = Kohana::config('settings.default_zoom');
-		$this->themes->js->latitude = Kohana::config('settings.default_lat');
-		$this->themes->js->longitude = Kohana::config('settings.default_lon');
 		$this->themes->js->default_map_all = Kohana::config('settings.default_map_all');
 
 		$this->themes->js->active_startDate = $display_startDate;

@@ -115,8 +115,15 @@ class Alerts_Controller extends Main_Controller {
         }
         else
         {
-			$form['alert_lat'] = Kohana::config('settings.default_lat');
-			$form['alert_lon'] = Kohana::config('settings.default_lon');
+            if (is_array($this->session->get('city_local'))) {
+                $city = $this->session->get('city_local');
+        		$form['alert_lat'] = $city['city_lat'];
+        		$form['alert_lon'] = $city['city_lon'];
+            } else {
+    			$form['alert_lat'] = Kohana::config('settings.default_lat');
+    			$form['alert_lon'] = Kohana::config('settings.default_lon');
+            }
+                        
 			$form['alert_radius'] = 20;
 			$form['alert_category'] = array();
         }

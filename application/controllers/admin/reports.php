@@ -814,6 +814,19 @@ class Reports_Controller extends Admin_Controller
 		
 		if ( ! $form['latitude'] OR !$form['latitude'])
 		{
+		
+		    if (is_array($this->session->get('city_local'))) {
+                $city = $this->session->get('city_local');
+        		$this->template->js->latitude = $city['city_lat'];
+        		$this->template->js->longitude = $city['city_lon'];
+            } else {
+
+        		$this->template->js->latitude = Kohana::config('settings.default_lat');
+        		$this->template->js->longitude = Kohana::config('settings.default_lon');
+            }
+        
+		
+		
 			$this->template->js->latitude = Kohana::config('settings.default_lat');
 			$this->template->js->longitude = Kohana::config('settings.default_lon');
 		}
