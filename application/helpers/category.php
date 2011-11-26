@@ -156,7 +156,9 @@ class category_Core {
 		}
 		
 		// Fetch the other categories
-		$sql = "SELECT c.id, c.parent_id, c.category_title, c.category_color, COUNT(c.id) report_count "
+// CC
+//		$sql = "SELECT c.id, c.parent_id, c.category_title, c.category_color, COUNT(c.id) report_count "
+		$sql = "SELECT c.id, c.parent_id, c.category_title, c.category_color, c.category_image_thumb, COUNT(c.id) report_count "
 			. "FROM ".$table_prefix."category c "
 			. "INNER JOIN ".$table_prefix."incident_category ic ON (ic.category_id = c.id) "
 			. "INNER JOIN ".$table_prefix."incident i ON (ic.incident_id = i.id) "
@@ -177,6 +179,8 @@ class category_Core {
 				$category_data[$category->parent_id]['children'][$category->id] = array(
 					'category_title' => $category->category_title,
 					'parent_id' => $category->parent_id,
+					'category_color' => "none",
+					'category_image_thumb' => $category->category_image_thumb,
 					'category_color' => $category->category_color,
 					'report_count' => $category->report_count,
 					'children' => array()
@@ -212,6 +216,7 @@ class category_Core {
 				'category_title' => $temp_category->category_title,
 				'parent_id' => $temp_category->parent_id,
 				'category_color' => $temp_category->category_color,
+				'category_image_thumb' => $temp_category->category_image_thumb,
 				'report_count' => $report_count,
 				'children' => array()
 			);
@@ -236,15 +241,18 @@ class category_Core {
 		foreach ($category_data as $id => $category)
 		{
 			// Determine the category class
-			$category_class = ($category['parent_id'] > 0)? " class=\"report-listing-category-child\"" : "";
-			
+			// With and without backgroud color for Parent categories:
+			$category_class = ($category['parent_id'] > 0)? " class=\"report-listing-category-child\"" : " style=\"background-color: #".$category['category_color']."\" class=\"item-count cat_parent\"";
+//			$category_class = ($category['parent_id'] > 0)? " class=\"report-listing-category-child\"" : " class=\"item-count cat_parent\"";
 			$tree_html .= "<li".$category_class.">"
-							. "<a href=\"#\" class=\"cat_selected\" id=\"filter_link_cat_".$id."\">"
-							. "<span class=\"item-swatch\" style=\"background-color: #".$category['category_color']."\">&nbsp;</span>"
-							. "<span class=\"item-title\">".strip_tags($category['category_title'])."</span>"
-							. "<span class=\"item-count\">".$category['report_count']."</span>"
-							. "</a></li>";
-							
+					. "<a href=\"#\" class=\"cat_selected\" id=\"filter_link_cat_".$id."\">";
+			if ($category['parent_id'] == '0') {
+				$tree_html .= "<span class=\"item-swatch\"><img src=\"media/uploads/".$category['category_image_thumb']."\" /></span>";
+// CC				$tree_html .= "<span class=\"item-swatch\" style=\"background-color: #".$category['category_color']."\">&nbsp;</span>";
+			}
+			$tree_html .= "<span class=\"item-title\">".strip_tags($category['category_title'])."</span>"
+					. "<span class=\"item-count\">".$category['report_count']."</span>"
+					. "</a></li>";
 			$tree_html .= self::_generate_treeview_html($category['children']);
 		}
 		
