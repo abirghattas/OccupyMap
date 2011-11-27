@@ -7,10 +7,18 @@
 
 $config['_default'] = 'main';
 $config['feed/atom'] = 'feed/index/atom';
+
 $config['Philadelphia'] = 'city/local/Philadelphia';
 $config['Philly'] = 'city/local/Philadelphia';
+$config['philadelphia'] = 'city/local/Philadelphia';
+$config['philly'] = 'city/local/Philadelphia';
+
 $config['LA'] = 'city/local/Los Angeles';
 $config['LosAngeles'] = 'city/local/Los Angeles';
+$config['la'] = 'city/local/Los Angeles';
+$config['losangeles'] = 'city/local/Los Angeles';
+
+
 $config['NYC'] = 'city/local/New York';
 
 
