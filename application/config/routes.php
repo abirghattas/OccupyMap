@@ -20,6 +20,9 @@ $config['losangeles'] = 'city/local/Los Angeles';
 
 
 $config['NYC'] = 'city/local/New York';
+$config['nyc'] = 'city/local/New York';
+$config['NewYork'] = 'city/local/New York';
+$config['newyork'] = 'city/local/New York';
 
 
 // Action::config - Config Routes

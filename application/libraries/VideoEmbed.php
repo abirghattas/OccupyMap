@@ -52,6 +52,8 @@ class VideoEmbed
                 $return = "";
         	    switch ($key) {
         	    case "youtube":
+        	    case "youtube-shortlink":
+
         		// Check for autoplay
         		$you_auto = ($auto == "play")? "&autoplay=1" : "";
 		

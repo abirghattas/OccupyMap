@@ -1,4 +1,7 @@
 <div class="block">
+<a href="<?php echo url::site() ?>?full=1">View Full Website</a>
+</div>
+<div class="block">
 	<h2 class="submit"><a href="<?php echo url::site()."mobile/reports/submit/" ?>">Submit A Report</a></h2>
 </div>
 <div class="block">
