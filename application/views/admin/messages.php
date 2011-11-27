@@ -13,9 +13,18 @@
  * @license	   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License (LGPL) 
  */
 ?>
+
 			<div class="bg">
 				<h2>
 					<?php admin::messages_subtabs($service_id); ?>
+					<?php if ($service_id==3): ?>
+                        <?php if (isset($no_rt) && ($no_rt==1)):?>
+                                <a href="<?=url::site()?>admin/messages/index/<?=$service_id?>/">Show Retweets</a>
+                        <?php else:?>
+                                <a href="<?=url::site()?>admin/messages/index/<?=$service_id?>/?no_rt=1">No Retweets</a>
+
+                        <?php endif?>
+					<?php endif ?>
 				</h2>
 
 <?php
@@ -28,6 +37,7 @@
 				<div class="tabs">
 					<!-- tabset -->
 					<ul class="tabset">
+					     
 						<li><a href="<?php echo url::site()."admin/messages/index/".$service_id; ?>?type=1" <?php if ($type == '1') echo "class=\"active\""; ?>><?php echo Kohana::lang('ui_main.inbox');?></a></li>
 						<?php
 						if ($service_id == 1)

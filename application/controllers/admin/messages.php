@@ -78,7 +78,10 @@ class Messages_Controller extends Admin_Controller
         {
             $filter .= ' AND message.reporter_id=\''.$_GET['rid'].'\'';
         }
-       	$filter .= " And message.message NOT LIKE 'RT%' "; 
+        if (isset($_GET['no_rt'])) {
+            $this->template->content->no_rt = 1;
+           	$filter .= " And message.message NOT LIKE 'RT%' "; 
+        }
         // ALL / Trusted / Spam
         $level = '0';
         if (isset($_GET['level']) AND !empty($_GET['level']))
@@ -194,11 +197,20 @@ class Messages_Controller extends Admin_Controller
             
         // Get Message Count
         // ALL
-        $this->template->content->count_all = ORM::factory('message')
-                                                        ->join('reporter','message.reporter_id','reporter.id')
-                                                        ->where('service_id', $service_id)
-                                                        ->where('message_type', 1)
-                                                        ->count_all();
+        if (isset($_GET["no_rt"]) && ($service_id==3)){
+            $this->template->content->count_all = ORM::factory('message')
+                                                            ->join('reporter','message.reporter_id','reporter.id')
+                                                            ->where('service_id=3 and message_type=1 and message.message NOT LIKE "RT%"')
+                                                            ->count_all();
+            
+        } else {
+            $this->template->content->count_all = ORM::factory('message')
+                                                            ->join('reporter','message.reporter_id','reporter.id')
+                                                            ->where('service_id', $service_id)
+                                                            ->where('message_type', 1)
+                                                            ->count_all();
+            
+        }
             
         // Trusted
         $this->template->content->count_trusted = ORM::factory('message')
