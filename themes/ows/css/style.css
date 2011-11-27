@@ -2210,7 +2210,7 @@ a.btn-show { display:none; }
 .ui-accordion .ui-accordion-header a.reset, a.reset { color:#981e01;  }
 
 /* Filter content boxes */
-.f-category-box { height:258px; }
+.f-category-box { height: auto; } /* To allow for a longer list of categories -cc */
 .f-location-box .map { width: 259px !important; height: 280px !important; padding: 0; margin: 0;}
 .f-location-box .rb_location-radius { width: 255px; height: 275px; }
 .f-type-box {}
@@ -2233,7 +2233,21 @@ ul.filter-list li a.selected {
 
 ul.filter-list li a span.item-swatch { display:block; height:16px; width:16px; margin-right: 8px; border:1px solid white; float:left; }
 ul.filter-list li a span.item-icon { display:block; float:left; margin-right:8px; height:16px; width:16px; }
-ul.filter-list li a span.item-title { display:block; padding:0 40px 0 26px; }
+ul.filter-list li.cat_parent a span.item-title {
+    display:block;
+    padding:0 40px 0 26px;
+    text-decoration: none;
+    color: #FFF;
+    font-weight: bold;
+    -moz-text-shadow: 1px 1px 2px #000;
+    -webkit-text-shadow: 1px 1px 2px #000;
+    text-shadow: 1px 1px 2px #000;
+}
+ul.filter-list li.report-listing-category-child a span.item-title {
+    display:block;
+    padding:0 40px 0 26px;
+}
+
 ul.filter-list li a span.item-count {
     display:block; 
     padding:1px 3px; 
