@@ -4,8 +4,8 @@
         <div class="green-box">
            <h3>
             <a href="<?=url::site()?>/city/none"><strong>NYC</strong></a> |
-            <strong>Support Occupations Under Threat of Eviction: </strong><a href="<?=url::site()?>/city/local/Philadelphia">Philadelphia</a> |
-            <a href="<?=url::site()?>/city/local/Los Angeles">Los Angeles</a>
+            <strong>Support Occupations Under Threat of Eviction: </strong><a href="<?=url::site()?>Philadelphia">Philadelphia</a> |
+            <a href="<?=url::site()?>Los Angeles">Los Angeles</a>
             </h3>
         </div>
         <!--

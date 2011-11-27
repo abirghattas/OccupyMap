@@ -7,6 +7,12 @@
 
 $config['_default'] = 'main';
 $config['feed/atom'] = 'feed/index/atom';
+$config['Philadelphia'] = 'city/local/Philadelphia';
+$config['Philly'] = 'city/local/Philadelphia';
+$config['LA'] = 'city/local/Los Angeles';
+$config['LosAngeles'] = 'city/local/Los Angeles';
+$config['NYC'] = 'city/local/New York';
+
 
 // Action::config - Config Routes
 Event::run('ushahidi_action.config_routes', $config);

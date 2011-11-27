@@ -9,7 +9,9 @@ class City_Controller extends Main_Controller {
         Kohana::config_set('settings.default_lon',$city->city_lon);
         $this->session->set('city_local',array("city"=>$city->city,
             "city_lat"=>$city->city_lat,"city_lon"=>$city->city_lon));
-        url::redirect(url::site());
+        Main_Controller::index();
+
+//        url::redirect(url::site());
     }
     
     public function none() {
