@@ -3,7 +3,7 @@
 	<div id="mainmiddle" class="floatbox withright">
         <div class="green-box">
            <h3>
-            <a href="<?=url::site()?>/city/none"><strong>NYC</strong></a> |
+            <a href="<?=url::site()?>nyc"><strong>NYC</strong></a> |
             <strong>Support Occupations Under Threat of Eviction: </strong><a href="<?=url::site()?>Philadelphia">Philadelphia</a> |
             <a href="<?=url::site()?>LosAngeles">Los Angeles</a>
             </h3>
