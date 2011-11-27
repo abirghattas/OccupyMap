@@ -2205,7 +2205,7 @@ a.btn-show { display:none; }
 /* Content area */
 .ui-accordion .ui-accordion-content { padding:0 8px 18px 8px; font-size:11px; }
 .ui-accordion .ui-accordion-content p { margin-bottom:8px; } 
-.ui-accordion .ui-accordion-content a { color:#1f5e82;  }
+.ui-accordion .ui-accordion-content a { color:#1f5e82; text-decoration: none; }
 .ui-accordion .ui-accordion-content a.reset,
 .ui-accordion .ui-accordion-header a.reset, a.reset { color:#981e01;  }
 
