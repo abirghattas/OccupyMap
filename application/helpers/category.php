@@ -239,14 +239,14 @@ class category_Core {
 		{
 			// Determine the category class
 			// CC - Set bgcolor for parent cats
-			$bgcolor = colorBrightness($category['category_color'], 0.5);
+			$bgcolor = colorBrightness($category['category_color'], 1);
 
 			$bgcolor_child = colorBrightness($bgcolor, 0.20);
 
                         if ($category['parent_id'] > 0) { // cat is not top level
 				$category_class = " style=\"\" class=\"report-listing-category-child\"";
 			} else {
-				$category_class = " style=\"background-color: #".$bgcolor."\" class=\"item-count cat_parent\"";
+				$category_class = " style=\"background-color: #".$bgcolor."\" class=\"item-count cat_parent r-3\"";
 			}
 
 			$tree_html .= "<li".$category_class.">"
