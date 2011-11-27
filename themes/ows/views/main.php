@@ -5,7 +5,7 @@
            <h3>
             <a href="<?=url::site()?>/city/none"><strong>NYC</strong></a> |
             <strong>Support Occupations Under Threat of Eviction: </strong><a href="<?=url::site()?>Philadelphia">Philadelphia</a> |
-            <a href="<?=url::site()?>Los Angeles">Los Angeles</a>
+            <a href="<?=url::site()?>LosAngeles">Los Angeles</a>
             </h3>
         </div>
         <!--
