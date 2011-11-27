@@ -22,7 +22,7 @@ class category_Core {
 		$l = Kohana::config('locale.language.0');
 
 		$translated_title = Category_Lang_Model::category_title($cid, $l);
-		
+
 		$category_title = ($translated_title)? $translated_title :  $category->category_title;
 
 		//$category_title = $category->category_title;
@@ -101,7 +101,7 @@ class category_Core {
 
 		return $html;
 	}
-	
+
 	/**
 	 * Generates a category tree view - recursively iterates
 	 *
@@ -111,25 +111,25 @@ class category_Core {
 	{
 		// To hold the category data
 		$category_data = array();
-		
+
 		// Database table prefix
 		$table_prefix = Kohana::config('database.default.table_prefix');
-		
+
 		// Database instance
 		$db = new Database();
-		
+
 		// Fetch all the top level parent categories
 		foreach (Category_Model::get_categories() as $category)
 		{
 			self::_extend_category_data($category_data, $category);
 		}
-		
+
 		// NOTES: Emmanuel Kala - Aug 5, 2011
 		// Initialize the report totals for the parent categories just in case
 		// the deployment does not have sub-categories in which case the query
 		// below won't return a result
 		self::_init_parent_category_report_totals($category_data, $table_prefix);
-		
+
 		// Query to fetch the report totals for the parent categories
 		$sql = "SELECT c2.id,  COUNT(DISTINCT ic.incident_id)  AS report_count "
 			. "FROM ".$table_prefix."category c, ".$table_prefix."category c2, ".$table_prefix."incident_category ic "
@@ -143,7 +143,7 @@ class category_Core {
 			. "AND c2.category_title != \"Trusted Reports\" "
 			. "GROUP BY c2.id "
 			. "ORDER BY c2.id ASC";
-		
+
 		// Update the report_count field of each top-level category
 		foreach ($db->query($sql) as $category_total)
 		{
@@ -154,10 +154,9 @@ class category_Core {
 				$category_data[$category_total->id]['report_count'] = $category_total->report_count;
 			}
 		}
-		
+
 		// Fetch the other categories
-// CC
-//		$sql = "SELECT c.id, c.parent_id, c.category_title, c.category_color, COUNT(c.id) report_count "
+                // CC - added image_thumb for categories
 		$sql = "SELECT c.id, c.parent_id, c.category_title, c.category_color, c.category_image_thumb, COUNT(c.id) report_count "
 			. "FROM ".$table_prefix."category c "
 			. "INNER JOIN ".$table_prefix."incident_category ic ON (ic.category_id = c.id) "
@@ -166,13 +165,13 @@ class category_Core {
 			. "AND i.incident_active = 1 "
 			. "GROUP BY c.category_title "
 			. "ORDER BY c.category_title ASC";
-		
+
 		// Add child categories
 		foreach ($db->query($sql) as $category)
 		{
 			// Extend the category data array
 			self::_extend_category_data($category_data, $category);
-			
+
 			if (array_key_exists($category->parent_id, $category_data))
 			{
 				// Add children
@@ -187,11 +186,11 @@ class category_Core {
 				);
 			}
 		}
-		
+
 		// Generate and return the HTML
 		return self::_generate_treeview_html($category_data);
 	}
-	
+
 	/**
 	 * Helper method for adding parent categories to the category data
 	 *
@@ -211,7 +210,6 @@ class category_Core {
 		{
 			// Get the report count
 			$report_count = property_exists($temp_category, 'report_count')? $temp_category->report_count : 0;
-			
 			$array[$temp_category->id] = array(
 				'category_title' => $temp_category->category_title,
 				'parent_id' => $temp_category->parent_id,
@@ -226,40 +224,46 @@ class category_Core {
 
 		return FALSE;
 	}
-	
+
 	/**
 	 * Traverses an array containing category data and returns a tree view
 	 *
 	 * @param array $category_data
 	 * @return string
 	 */
-	private static function _generate_treeview_html($category_data)
+	private static function _generate_treeview_html($category_data, $parent_bgcolor = '')
 	{
 		// To hold the treeview HTMl
 		$tree_html = "";
-		
 		foreach ($category_data as $id => $category)
 		{
 			// Determine the category class
-			// With and without backgroud color for Parent categories:
-			$category_class = ($category['parent_id'] > 0)? " class=\"report-listing-category-child\"" : " style=\"background-color: #".$category['category_color']."\" class=\"item-count cat_parent\"";
-//			$category_class = ($category['parent_id'] > 0)? " class=\"report-listing-category-child\"" : " class=\"item-count cat_parent\"";
+			// CC - Set bgcolor for parent cats
+			$bgcolor = colorBrightness($category['category_color'], 0.5);
+
+			$bgcolor_child = colorBrightness($bgcolor, 0.20);
+
+                        if ($category['parent_id'] > 0) { // cat is not top level
+				$category_class = " style=\"\" class=\"report-listing-category-child\"";
+			} else {
+				$category_class = " style=\"background-color: #".$bgcolor."\" class=\"item-count cat_parent\"";
+			}
+
 			$tree_html .= "<li".$category_class.">"
 					. "<a href=\"#\" class=\"cat_selected\" id=\"filter_link_cat_".$id."\">";
-			if ($category['parent_id'] == '0') {
-				$tree_html .= "<span class=\"item-swatch\"><img src=\"media/uploads/".$category['category_image_thumb']."\" /></span>";
-// CC				$tree_html .= "<span class=\"item-swatch\" style=\"background-color: #".$category['category_color']."\">&nbsp;</span>";
-			}
+				if ($category['parent_id'] == '0') {
+					$tree_html .= "<span class=\"item-swatch\"><img src=\"media/uploads/".$category['category_image_thumb']."\" /></span>";
+				}
 			$tree_html .= "<span class=\"item-title\">".strip_tags($category['category_title'])."</span>"
 					. "<span class=\"item-count\">".$category['report_count']."</span>"
 					. "</a></li>";
-			$tree_html .= self::_generate_treeview_html($category['children']);
+			$tree_html .= self::_generate_treeview_html($category['children'], $parent_bgcolor);
 		}
-		
+
 		// Return
 		return $tree_html;
 	}
-	
+
 	/**
 	 * Initializes the report totals for the parent categories
 	 *
@@ -277,10 +281,10 @@ class category_Core {
 			. "AND i.incident_active = 1 "
 			. "AND c.parent_id = 0 "
 			. "GROUP BY c.id";
-		
+
 		// Fetch the records
 		$result = Database::instance()->query($sql);
-		
+
 		// Set the report totals for each of the parent categorie
 		foreach ($result as $category)
 		{
@@ -289,8 +293,49 @@ class category_Core {
 				$category_data[$category->id]['report_count'] = $category->report_count;
 			}
 		}
-		
+
 		// Garbage collection
 		unset ($sql, $result);
 	}
 }
+
+function colorBrightness($hex, $percent) {
+	// Work out if hash given
+	$hash = '';
+	if (stristr($hex,'#')) {
+		$hex = str_replace('#','',$hex);
+		$hash = '#';
+	}
+	/// HEX TO RGB
+	$rgb = array(hexdec(substr($hex,0,2)), hexdec(substr($hex,2,2)), hexdec(substr($hex,4,2)));
+	//// CALCULATE
+	for ($i=0; $i<3; $i++) {
+		// See if brighter or darker
+		if ($percent > 0) {
+			// Lighter
+			$rgb[$i] = round($rgb[$i] * $percent) + round(255 * (1-$percent));
+		} else {
+			// Darker
+			$positivePercent = $percent - ($percent*2);
+			$rgb[$i] = round($rgb[$i] * $positivePercent) + round(0 * (1-$positivePercent));
+		}
+		// In case rounding up causes us to go to 256
+		if ($rgb[$i] > 255) {
+			$rgb[$i] = 255;
+		}
+	}
+	//// RBG to Hex
+	$hex = '';
+	for($i=0; $i < 3; $i++) {
+		// Convert the decimal digit to hex
+		$hexDigit = dechex($rgb[$i]);
+		// Add a leading zero if necessary
+		if(strlen($hexDigit) == 1) {
+		$hexDigit = "0" . $hexDigit;
+		}
+		// Append to the hex string
+		$hex .= $hexDigit;
+	}
+	return $hash.$hex;
+}
+
