@@ -32,7 +32,8 @@ class VideoEmbed
 			"lieveleak" => "http://www.liveleak.com/view?i=",
 			"dotsub" => "http://dotsub.com/media/",
 			"vimeo" => "http://vimeo.com/",
-			"youtube-shortlink" => "http://youtu.be/"
+			"youtube-shortlink" => "http://youtu.be/",
+            "twitvid" => "http://www.twitvid.com/"
 		);
 		
 		
@@ -65,6 +66,14 @@ class VideoEmbed
         			. "	</embed>"
         			. "</object>";
         		break;
+        		
+        		//twitvid
+        		case "twitvid":
+        		$return = '
+        		<iframe title="Twitvid video player" class="twitvid-player" type="text/html" width="480" height="360" src="http://www.twitvid.com/embed.php?guid='.$code.'&autoplay=0" frameborder="0"></iframe>
+        		';
+        		break;
+        		
                 case "google":
         			// Check for autoplay
         			$google_auto = ($auto == "play")? "&autoPlay=true" : "";
