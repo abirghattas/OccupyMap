@@ -1,6 +1,6 @@
-Theme Name: #OWS
-Description: Based on default, but with some #ows customizations
-Demo: none
+Theme Name: Unicorn
+Description: Map is front-and center with a simplified home page. Please note, this plugin requ
+Demo: http://www.ushahidi.com
 Version: 1.0
-Author: NYCGA Tech Ops
-Author Email: internet@nycga.net
+Author: Caleb Bell
+Author Email: caleb@ushahidi.com

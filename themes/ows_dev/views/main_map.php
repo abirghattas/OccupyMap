@@ -1,4 +1,5 @@
 <!-- map -->
+<div id="mapWrapper">
 <div class="map" id="map"></div>
 <div style="clear:both;"></div>
 <div id="mapStatus">
@@ -8,4 +9,5 @@
 	<div id="mapOutput"></div>
 </div>
 <div style="clear:both;"></div>
+</div>
 <!-- / map -->
