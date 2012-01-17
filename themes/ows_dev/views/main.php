@@ -18,7 +18,7 @@ $(function(){
 
 </script>
 <style>
-body .rapidxwpr, div#mainmenu { margin:0; width:100%; }
+body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 </style>
 <!-- main body -->
 <div id="main" class="clearingfix">

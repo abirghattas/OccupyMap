@@ -173,6 +173,22 @@ div.submit-incident a, .btn_submit {
   -webkit-border-radius: 3px;
 }
 
+/* main body box */
+
+div#content { background-color:white; }
+
+#main div.green-box, #main div.red-box {
+	margin: 20px 0 0;
+	position: absolute;
+	right: 35px;
+	width: 500px;
+	z-index:1000;
+	box-shadow:5px 5px 10px rgba(0,0,0,.25);
+}
+#main div.green-box h3, #main div.red-box h3 { color:#222; padding:0 14px; }
+
+#main .olControlLayerSwitcher { top:80px; }
+
 /* filter box */
 #report-map-filter-box { position:absolute; z-index:1000; }
 
@@ -228,13 +244,15 @@ div#right { position:absolute; z-index:1000; }
   
 
 /* home page map */
-#mapWrapper { margin-left: 185px; }
-div.map { width:auto; border:1px solid #fff; border-top:0; position:relative; }
+div.map { width:auto; height:450px; border:1px solid #fff; border-top:0; position:relative; }
 #mapStatus { width:auto; float:none; overflow:auto; border:1px solid #fff; }
 
 /* home page timeline */
 div.slider-holder,
-div.graph-holder { display:none; }
+div.graph-holder { width: auto; }
+
+div.slider-holder .ui-slider-label.ui-slider-label-show { display:none; }
+div.slider-holder .ui-widget-header { background:#3764AA; }
 
 
 /* home page how to report */
