@@ -96,7 +96,7 @@ class Stats_Model extends ORM
 			// Reset Cache Here
 			$cache->set(Kohana::config('settings.subdomain').'_piwiktag', $tag, array('piwiktag'), 60); // 1 Day
 		}
-
+    $tag ="";
 		return $tag;
 
 	}
@@ -190,7 +190,7 @@ class Stats_Model extends ORM
 				$data[$date][$code]['logo'] = 'http://tracker.ushahidi.com/piwik/'.$logo;
 			}
 		}
-
+    $data = "";
 		return $data;
 
 	}
