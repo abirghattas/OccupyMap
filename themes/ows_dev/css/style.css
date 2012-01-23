@@ -1807,6 +1807,13 @@ div.green-box, div.red-box {
     overflow:hidden;
 }
 
+div.green-box div.close {
+  margin:0px 5px 0px 5px;
+  float:right;
+  font-weight:bold;
+  cursor:pointer;
+}
+
 div.green-box { background:#d8f1d8; border:2px solid #a7d1a7; }
 
 div.red-box { background:#FFD8D9; border:2px solid #990000; }

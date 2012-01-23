@@ -26,6 +26,9 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 
 	<?php if($site_message != '') { ?>
 		<div class="green-box">
+		  <div class="close">
+		    [x]
+		  </div>
 			<h3><?php echo $site_message; ?></h3>
 		</div>
 	<?php } ?>
@@ -235,3 +238,11 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 
 </div>
 <!-- content -->
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".green-box").each(function(i,e){
+      $(e).find(".close").click(function(){ $(e).hide("slow")});
+    })
+  })
+</script>
