@@ -44,8 +44,6 @@ if (isset($uri_segments))
   <!-- top bar -->
   <div id="top-bar">
 		
-		<div id="miniTitle"><a href="<?php echo url::site();?>"><?php echo $site_name; ?></a></div>
-		
 		<!-- submit incident -->
 		<?php echo $submit_btn; ?>
 		<!-- / submit incident -->

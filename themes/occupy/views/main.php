@@ -192,7 +192,8 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 						if ($twitter_hashtag != end($twitter_hashtag_array)) {
 							echo " or ";
 						}
-						} ?></li><?php
+						} ?></li>
+						<?php
 						} ?><li><a href="<?php echo url::site() . 'reports/submit/'; ?>"><?php echo Kohana::lang('ui_main.report_option_4'); ?></a></li>
 					</ol>
 
