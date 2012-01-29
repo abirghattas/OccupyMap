@@ -22,7 +22,24 @@ $config['losangeles'] = 'city/local/Los Angeles';
 $config['NYC'] = 'city/local/New York';
 $config['nyc'] = 'city/local/New York';
 $config['NewYork'] = 'city/local/New York';
-$config['newyork'] = 'city/local/New York';
+$config['boston'] = 'city/local/Boston';
+$config['Boston'] = 'city/local/Boston';
+$config['Toronto'] = 'city/local/Toronto';
+$config['toronto'] = 'city/local/Toronto';
+$config['Baltimore'] = 'city/local/Baltimore';
+$config['baltimore'] = 'city/local/Baltimore';
+$config['Chicago'] = 'city/local/Chicago';
+$config['chicago'] = 'city/local/Chicago';
+$config['oakland'] = 'city/local/Oakland';
+$config['Oakland'] = 'city/local/Oakland';
+$config['Portland'] = 'city/local/Portland';
+$config['portland'] = 'city/local/Portland';
+$config['PDX'] = 'city/local/Portland';
+$config['DesMoines'] = 'city/local/DesMoines';
+$config['desmoines'] = 'city/local/Desmoines';
+$config['DSM'] = 'city/local/DesMoines';
+$config['Austin'] = 'city/local/Austin';
+$config['austin'] = 'city/local/Austin';
 
 
 // Action::config - Config Routes
