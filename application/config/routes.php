@@ -41,6 +41,8 @@ $config['DSM'] = 'city/local/DesMoines';
 $config['Austin'] = 'city/local/Austin';
 $config['austin'] = 'city/local/Austin';
 
+$config['ElPaso'] = 'city/local/El Paso';
+$config['elpaso'] = 'city/local/El Paso';
 
 // Action::config - Config Routes
 Event::run('ushahidi_action.config_routes', $config);
