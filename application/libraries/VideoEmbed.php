@@ -33,7 +33,7 @@ class VideoEmbed
 			"dotsub" => "http://dotsub.com/media/",
 			"vimeo" => "http://vimeo.com/",
 			"youtube-shortlink" => "http://youtu.be/",
-            "twitvid" => "http://www.twitvid.com/"
+      "twitvid" => "http://www.twitvid.com/"
 		);
 		
 		

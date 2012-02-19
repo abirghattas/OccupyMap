@@ -548,7 +548,7 @@ class Incidents_Api_Object extends Api_Object_Core {
 					"incident" => array(
 						"incidentid" => $item->incident_id,
 						"incidenttitle" => $item->incident_title,
-						"incidentdescription" => $item->incident_description,
+						"incidentdescription" => VideoEmbed::embed($item->incident_description),
 						"incidentdate" => $item->incident_date,
 						"incidentmode" => $item->incident_mode,
 						"incidentactive" => $item->incident_active,
