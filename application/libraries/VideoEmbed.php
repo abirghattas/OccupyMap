@@ -17,7 +17,7 @@ class VideoEmbed
 	 * @param string $raw URL of the video to be embedded
 	 * @param string $auto Autoplays the video as soon as its loaded
 	 */
-	public function embed($raw, $auto=null)
+	public function embed($raw, $auto=null,$tiny=false)
 	{
 		// To hold the name of the video service
 		$service_name = "";
@@ -57,12 +57,16 @@ class VideoEmbed
 
         		// Check for autoplay
         		$you_auto = ($auto == "play")? "&autoplay=1" : "";
-		
-        		$return .= "<object width='500' height='315'>"
+		        $size = ($tiny) ?"<object width='160' height='100'>" : "<object width='500' height='315'>";
+		        $size2 = ($tiny) ?"		wmode='transparent' width='150' height='100'>"
+      			: "		wmode='transparent' width='500' height='315'>"
+      			;
+        		
+        		$return .= $size
         			. "	<param name='movie' value='http://www.youtube.com/v/$code$you_auto'></param>"
         			. "	<param name='wmode' value='transparent'></param>"
         			. "	<embed src='http://www.youtube.com/v/$code$you_auto' type='application/x-shockwave-flash' "
-        			. "		wmode='transparent' width='500' height='315'>"
+            .$size2
         			. "	</embed>"
         			. "</object>";
         		break;
