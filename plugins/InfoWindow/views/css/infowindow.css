@@ -438,4 +438,11 @@ a.iconic:hover {
     _behavior: expression(this.src = this.src ? this.src : this.currentStyle.backgroundImage.split('"')[1], this.style.background = "none", this.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src=" + this.src + ", sizingMethod='scale')");
 }
 
+/*
+tweak to fit the whole info window
+*/
 
+#iw-bubble_contentDiv { 
+  min-height:360px !important;
+  width:480px !important;
+}

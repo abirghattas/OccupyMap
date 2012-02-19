@@ -181,7 +181,6 @@ class Reports_Controller extends Main_Controller {
 		// Set the next and previous page numbers
 		$report_listing->next_page = $pagination->next_page;
 		$report_listing->previous_page = $pagination->previous_page;
-
 		if ($pagination->total_items > 0)
 		{
 			$current_page = ($pagination->sql_offset/ $pagination->items_per_page) + 1;
@@ -206,7 +205,6 @@ class Reports_Controller extends Main_Controller {
 		{
 			$report_listing->stats_breadcrumb = '('.$pagination->total_items.' report'.$plural.')';
 		}
-		
 		// Return
 		return $report_listing;
 	}

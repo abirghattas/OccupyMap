@@ -28,7 +28,7 @@ class youtube {
 	public function add()
 	{
 		// Only add the events if we are on that controller
-		if (Router::$controller == 'reports' AND Router::$method == 'view')
+		if (Router::$controller == 'reports')
 		{
 			Event::add('ushahidi_filter.report_description', array($this, '_embed_youtube'));
 		}

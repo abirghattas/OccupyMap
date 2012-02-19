@@ -4,9 +4,7 @@ class InfoWindow_Controller extends Controller{
 
 
 	public function index(){
-		
 		$this->view = View::factory("infowindow/infowindow_js");
-		
 		
 		
 		header("Content-Type: text/javascript"); //set proper mime-type;

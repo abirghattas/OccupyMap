@@ -1,4 +1,4 @@
-var num_pages = 1,
+var num_pages = 10,
 	paginate = false,
 	incidents = [],
 	popup,
