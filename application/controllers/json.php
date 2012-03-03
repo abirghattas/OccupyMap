@@ -855,6 +855,7 @@ class Json_Controller extends Template_Controller
 		foreach($cat_incident->incident_category as $category) {
 			$incident_category[] = $category->category_id;
 		}
+    shuffle($incident_category);
     $categories = implode(",",$incident_category);
     return $categories;
   }

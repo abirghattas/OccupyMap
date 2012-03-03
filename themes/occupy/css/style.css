@@ -2683,9 +2683,9 @@ div#main { padding:15px 10px; }
 #main .left-col { background:#EEEDEA; position:relative; padding:35px 10px 10px; margin:4px 0 0 18px; width:525px; }
 
 
-.left-col h1.report-title { float:left; position:absolute; top:-18px; left:-18px; padding:5px; border:7px solid #fff; background:#529bf5; color:#fff; }
+.left-col h1.report-title { float:left; margin-top:-50px; margin-left:-25px; padding:5px; border:7px solid #fff; background:#529bf5; color:#fff; }
 
-.report_detail .r_verified { position:absolute; top:30px; right:18px;  }
+.report_detail .r_verified {margin-top:0px; margin-right:5px;}
 
 div.report-additional-reports { background:#EEEDEA; position:relative; padding:35px 10px 10px; margin-left:18px; }
 div.report-additional-reports h4 { position:absolute; float:left; top:-18px; left:-18px; padding:5px; border:7px solid #fff; background:#529bf5; color:#fff; }

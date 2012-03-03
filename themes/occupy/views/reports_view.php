@@ -1,6 +1,17 @@
 <div id="main" class="report_detail">
 
 	<div class="left-col" style="float:left;width:520px; margin-right:20px">
+
+		<h1 class="report-title"><?php
+			echo $incident_title;
+			
+			// If Admin is Logged In - Allow For Edit Link
+			if ($logged_in)
+			{
+				echo " [&nbsp;<a href=\"".url::site()."admin/reports/edit/".$incident_id."\">".Kohana::lang('ui_main.edit')."</a>&nbsp;]";
+			}
+		?></h1>
+
 	
   	  <?php
     	  if ($incident_verified)
@@ -13,15 +24,6 @@
     		}
   	  ?>	
 
-		<h1 class="report-title"><?php
-			echo $incident_title;
-			
-			// If Admin is Logged In - Allow For Edit Link
-			if ($logged_in)
-			{
-				echo " [&nbsp;<a href=\"".url::site()."admin/reports/edit/".$incident_id."\">".Kohana::lang('ui_main.edit')."</a>&nbsp;]";
-			}
-		?></h1>
 	
 		<p class="report-when-where">
 			<span class="r_date"><?php echo $incident_time.' '.$incident_date; ?> </span>
