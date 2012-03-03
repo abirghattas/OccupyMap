@@ -14,10 +14,15 @@
  * @copyright  Ushahidi - http://www.ushahidi.com
  * @license    http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License (LGPL) 
  */
+
 ?>
 		var map, markers;
 		var myPoint;
 		var selectedFeature;
+		var categoryMarkers =[];
+		<?php foreach ($this->template->content->category_images as $name=>$url):?>
+		  categoryMarkers['<?=$name?>'] = '<?=$url?>';
+		<?php endforeach?>
 		jQuery(window).load(function() {
 			var moved=false;
 
@@ -61,17 +66,19 @@
 				graphicZIndex: 1,
 				externalGraphic: "${graphic}",
 				graphicOpacity: 1,
-				graphicWidth: 21,
+				graphicWidth: 25,
 				graphicHeight: 25,
-				graphicXOffset: -14,
-				graphicYOffset: -27
+				graphicXOffset: -12,
+				graphicYOffset: -12
 			},
 			{
 				context: 
 				{
 					graphic: function(feature)
 					{
+					  return categoryMarkers[feature.data.category[0]];
 						if ( typeof(feature) != 'undefined' && 
+						
 							feature.data.id == <?php echo $incident_id; ?>)
 						{
 							return "<?php echo url::file_loc('img').'media/img/openlayers/marker.png' ;?>";
@@ -80,6 +87,8 @@
 						{
 							return "<?php echo url::file_loc('img').'media/img/openlayers/marker-gold.png' ;?>";
 						}
+						
+						
 					},
 					fillcolor: function(feature)
 					{
@@ -159,7 +168,8 @@
 			
 			// display the map centered on a latitude and longitude (Google zoom levels)
 
-			map.setCenter(myPoint, <?php echo ($incident_zoom) ? $incident_zoom : 10; ?>);
+      map.setCenter(myPoint, <?php echo ($incident_zoom) ? $incident_zoom : 14; ?>);
+
 		});
 		
 		$(document).ready(function(){

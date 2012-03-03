@@ -625,7 +625,47 @@ class Reports_Controller extends Main_Controller {
 			$this->template->content->incident_date = date('M j Y', strtotime($incident->incident_date));
 			$this->template->content->incident_time = date('H:i', strtotime($incident->incident_date));
 			$this->template->content->incident_category = $incident->incident_category;
+      $category_images = array();
+      $cats = ORM::factory('category')
+  	    ->where('category_visible', '1')
+  	    ->where('parent_id', '0')
+  	    ->where('category_trusted != 1')
+  	    ->orderby('category_title', 'ASC')
+  	    ->find_all();
+      
+      foreach ($cats as $c) {
+        $image_url = $c->category_image;
+        if (strlen($c->category_image) > 1) {
+          $image_url = $c->category_image;
+          $image_url = url::file_loc('img').'media/uploads/'.$image_url;
+          
+        } else {
+          $image_url =  url::file_loc('img').'media/img/openlayers/marker-gold.png';
+        }
 
+        $category_images[$c->id] = $image_url;
+
+        $subcats = ORM::factory('category')
+    	    ->where('category_visible', '1')
+    	    ->where('parent_id', $c->id)
+    	    ->where('category_trusted != 1')
+    	    ->orderby('category_title', 'ASC')
+    	    ->find_all();
+
+        
+        foreach ($subcats as $sc) {
+          $image_url = $c->category_image;
+          $image_url = url::file_loc('img').'media/uploads/'.$image_url;
+
+          if (strlen($sc->category_image) > 1) {
+            $image_url = $sc->category_image;
+            $image_url = url::file_loc('img').'media/uploads/'.$image_url;
+          }
+            $category_images[$sc->id] = $image_url;
+        }
+      }
+      $this->template->content->category_images = $category_images;
+      
 			// Incident rating
 			$this->template->content->incident_rating = ($incident->incident_rating == '')
 				? 0

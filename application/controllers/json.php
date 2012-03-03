@@ -56,7 +56,6 @@ class Json_Controller extends Template_Controller
 		$json_array = array();
 		$color = Kohana::config('settings.default_map_all');
 		$icon = "";
-
 		$media_type = (isset($_GET['m']) AND intval($_GET['m']) > 0)? intval($_GET['m']) : 0;
 		
 		// Get the incident and category id
@@ -94,7 +93,10 @@ class Json_Controller extends Template_Controller
 					}
 				}
 			}
-			
+			$category_str = $this->_categoryString($marker->incident_id);
+			//now reverse engineer color :/
+			$cats = explode(",",$category_str);
+			$cat_color = ORM::factory('category',$cats[0])->category_color;
 			$json_item = "{";
 			$json_item .= "\"type\":\"Feature\",";
 			$json_item .= "\"properties\": {";
@@ -111,9 +113,9 @@ class Json_Controller extends Template_Controller
 
 			$json_item .= (isset($category))
 				? "\"category\":[" . $category_id . "], "
-				: "\"category\":[0], ";
+				: "\"category\":[".$category_str."], ";
 
-			$json_item .= "\"color\": \"".$color."\", \n";
+			$json_item .= "\"color\": \"".$cat_color."\", \n";
 			$json_item .= "\"icon\": \"".$icon."\", \n";
 			$json_item .= "\"thumb\": \"".$thumb."\", \n";
 			$json_item .= "\"timestamp\": \"" . strtotime($marker->incident_date) . "\"";
@@ -353,6 +355,8 @@ class Json_Controller extends Template_Controller
 
 			foreach ($neighbours as $row)
 			{
+
+  			$categories = $this->_categoryString($row->id);
 				$json_item = "{";
 				$json_item .= "\"type\":\"Feature\",";
 				$json_item .= "\"properties\": {";
@@ -366,7 +370,7 @@ class Json_Controller extends Template_Controller
 				$json_item .= "\"name\":\"" . str_replace(chr(10), ' ', str_replace(chr(13), ' ', "<a href='" . url::base()
 						. "reports/view/" . $row->id . "'>".$encoded_title."</a>")) . "\",";
 				$json_item .= "\"link\": \"".url::base()."reports/view/".$row->id."\", ";
-				$json_item .= "\"category\":[0], ";
+				$json_item .= "\"category\":[".$categories."], ";
 				$json_item .= "\"timestamp\": \"" . strtotime($row->incident_date) . "\"";
 				$json_item .= "},";
 				$json_item .= "\"geometry\": {";
@@ -383,13 +387,13 @@ class Json_Controller extends Template_Controller
 			$json_single .= "\"type\":\"Feature\",";
 			$json_single .= "\"properties\": {";
 			$json_single .= "\"id\": \"".$marker->id."\", ";
-
+      $categories = $this->_categoryString($marker->id);
 			$encoded_title = utf8tohtml::convert($marker->incident_title,TRUE);
 
 			$json_single .= "\"name\":\"" . str_replace(chr(10), ' ', str_replace(chr(13), ' ', "<a href='" . url::base()
 					. "reports/view/" . $marker->id . "'>".$encoded_title."</a>")) . "\",";
 			$json_single .= "\"link\": \"".url::base()."reports/view/".$marker->id."\", ";
-			$json_single .= "\"category\":[0], ";
+			$json_single .= "\"category\":[".$categories."], ";
 			$json_single .= "\"timestamp\": \"" . strtotime($marker->incident_date) . "\"";
 			
 			// Get Incident Geometries
@@ -408,7 +412,7 @@ class Json_Controller extends Template_Controller
 				$json_item .= "\"name\":\"" . str_replace(chr(10), ' ', str_replace(chr(13), ' ', "<a href='" . url::base()
 					. "reports/view/" . $marker->id . "'>".$encoded_title."</a>")) . "\",";
 				$json_item .= "\"link\": \"".url::base()."reports/view/".$marker->id."\", ";
-				$json_item .= "\"category\":[0], ";
+				$json_item .= "\"category\":[".$categories."], ";
 				$json_item .= "\"timestamp\": \"" . strtotime($marker->incident_date) . "\"";
 				$json_item .= "},\"geometry\":";
 				$json_item .= "{\"type\":\"Point\", ";
@@ -428,6 +432,7 @@ class Json_Controller extends Template_Controller
 		$json = implode(",", $json_array);
 		
 		header('Content-type: application/json; charset=utf-8');
+		
 		$this->template->json = $json;
 	}
 
@@ -839,6 +844,20 @@ class Json_Controller extends Template_Controller
 		return $geometry;
 	}
 
+	/**
+	 * Returns a comma-delimited string of category ids for an incident
+	 * @param int $incident_id 
+	 	 * @return string
+	 */
+  private function _categoryString($incident_id) {
+	  $cat_incident = ORM::factory('incident', $incident_id);
+		$incident_category = array();
+		foreach($cat_incident->incident_category as $category) {
+			$incident_category[] = $category->category_id;
+		}
+    $categories = implode(",",$incident_category);
+    return $categories;
+  }
 
 	/**
 	 * Convert Longitude to Cartesian (Pixels) value

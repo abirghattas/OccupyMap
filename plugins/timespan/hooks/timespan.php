@@ -44,7 +44,6 @@ class timespan {
 		Event::add('ushahidi_filter.active_startDate', array($this, '_set_startDate'));		
 		Event::add('ushahidi_filter.active_endDate', array($this, '_set_endDate'));		
 		Event::add('ushahidi_filter.active_month', array($this, '_set_month'));		
-		
 		Event::add('ushahidi_filter.startDate', array($this, '_set_slider_start'));
 		Event::add('ushahidi_filter.endDate', array($this, '_set_slider_end'));
 	}

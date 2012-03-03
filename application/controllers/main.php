@@ -159,14 +159,13 @@ class Main_Controller extends Template_Controller {
 	    ->where('category_trusted != 1')
 	    ->orderby('category_title', 'ASC')
 	    ->find_all();
-
 	  return $categories;
 	}
 
     public function index()
     {
-        $this->template->header->this_page = 'home';
-        $this->template->content = new View('main');
+    $this->template->header->this_page = 'home';
+    $this->template->content = new View('main');
 		// Cacheable Main Controller
 		$this->is_cachable = TRUE;
 
@@ -179,6 +178,7 @@ class Main_Controller extends Template_Controller {
 		
 		// Filter::map_timeline - Modify Main Map Block
 		Event::run('ushahidi_filter.map_timeline', $div_timeline);
+		Event::run('ushahidi_filter.report_description', $div_map);
 		
 		$this->template->content->div_map = $div_map;
 		$this->template->content->div_timeline = $div_timeline;
@@ -284,6 +284,7 @@ class Main_Controller extends Template_Controller {
 		}
 		$this->template->content->shares = $shares;
 
+
 		// Get Default Color
 		$this->template->content->default_map_all = Kohana::config('settings.default_map_all');
 
@@ -315,7 +316,7 @@ class Main_Controller extends Template_Controller {
 
         // Get The START, END and Incident Dates
 
-        $startDate = "";
+    $startDate = "";
 		$endDate = "";
 		$display_startDate = 0;
 		$display_endDate = 0;
@@ -440,7 +441,7 @@ class Main_Controller extends Template_Controller {
 		$marker_stroke_width = Kohana::config('map.marker_stroke_width');
 		$marker_stroke_opacity = Kohana::config('map.marker_stroke_opacity');
 
-        // pdestefanis - allows to restrict the number of zoomlevels available
+    // pdestefanis - allows to restrict the number of zoomlevels available
 		$numZoomLevels = Kohana::config('map.numZoomLevels');
 		$minZoomLevel = Kohana::config('map.minZoomLevel');
 	   	$maxZoomLevel = Kohana::config('map.maxZoomLevel');
@@ -485,6 +486,8 @@ class Main_Controller extends Template_Controller {
     		$this->themes->js->latitude = Kohana::config('settings.default_lat');
     		$this->themes->js->longitude = Kohana::config('settings.default_lon');
         }
+
+
 
 		$this->themes->js->default_map = Kohana::config('settings.default_map');
 		$this->themes->js->default_map_all = Kohana::config('settings.default_map_all');
