@@ -9,6 +9,7 @@
 	// Action::header_scripts - Additional Inline Scripts from Plugins
 	Event::run('ushahidi_action.header_scripts');
 	?>
+	<script type="text/javascript" src="/themes/occupy/js/jquery.timepicker.js"></script>
 </head>
 
 
