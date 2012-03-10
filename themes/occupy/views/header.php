@@ -4,12 +4,19 @@
 	<title><?php echo $site_name; ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700' rel='stylesheet' type='text/css'>
+	<script type="text/javascript">
+  //define some global js constants for this page
+	 var site_url = "<?=url::site()?>";
+	</script>
+
 	<?php echo $header_block; ?>
 		<?php
 	// Action::header_scripts - Additional Inline Scripts from Plugins
 	Event::run('ushahidi_action.header_scripts');
 	?>
 	<script type="text/javascript" src="/themes/occupy/js/jquery.timepicker.js"></script>
+	<script type="text/javascript" src="/themes/occupy/js/jquery.soulmate.js"></script>
+
 </head>
 
 
@@ -51,15 +58,48 @@ if (isset($uri_segments))
 		
     <!-- searchbox -->
 		<div id="searchbox">
-			
 			<!-- languages -->
 			<?php echo $languages;?>
 			<!-- / languages -->
-
 			<!-- searchform -->
-			<?php echo $search; ?>
-			<!-- / searchform -->
+			<?php //echo $search; ?>
+			<div class="search-form">
+  			<form id="search" action="<?=url::site()?>/search" method="get">
+  		  	<ul>
+            <li>
+              <input id='search-input' type='text' name='q' value='Search a city, address, or keyword' autocomplete='off'/>      
+            </li>
+          </ul>
+        </form>
+			</div>
 			
+			<!-- / searchform -->
+      <script type="text/javascript">
+      $(document).ready(function(){
+            (function() {
+              var render, select;
+              $('#search-input').focus();
+              render = function(term, data, type) {
+                return term;
+              };
+              select = function(term, data, type) {
+                window.location.replace(site_url + data.url);
+               // return console.log(site_url + data.url);
+
+              };
+              $('#search-input').soulmate({
+                url: 'http://localhost:5678/search',
+                types: ['incident', 'location','city'],
+                renderCallback: render,
+                selectCallback: select,
+                minQueryLength: 2,
+                maxResults: 5
+              });
+            }).call(this);
+        $('#search-input').blur()
+        $('#search-input').focus(function(){$(this).val('')})
+      })
+      </script>			
 			<!-- user actions -->
 			<div id="loggedin_user_action" class="clearingfix">
 				<?php if($loggedin_username != FALSE){ ?>
