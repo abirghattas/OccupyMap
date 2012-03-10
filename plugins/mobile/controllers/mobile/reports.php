@@ -345,7 +345,7 @@ class Reports_Controller extends Mobile_Controller {
 	 */
 	private function _get_cities()
 	{
-		$cities = ORM::factory('city')->orderby('city', 'asc')->find_all();
+		$cities = ORM::factory('city')->orderby('city', 'asc')->limit(10)->find_all();
 		$city_select = array('' => 'Select A Location from the Drop-Down');
 
 		foreach ($cities as $city)
