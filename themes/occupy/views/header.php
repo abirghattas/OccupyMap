@@ -64,10 +64,10 @@ if (isset($uri_segments))
 			<!-- searchform -->
 			<?php //echo $search; ?>
 			<div class="search-form">
-  			<form id="search" action="<?=url::site()?>/search" method="get">
+  			<form id="search" action="<?=url::site()?>search" method="get">
   		  	<ul>
             <li>
-              <input id='search-input' type='text' name='q' value='Search a city, address, or keyword' autocomplete='off'/>      
+              <input id='search-input' type='text' name='q' value='Search a city, address, #hashtag or keyword' autocomplete='off'/>      
             </li>
           </ul>
         </form>
@@ -79,8 +79,39 @@ if (isset($uri_segments))
             (function() {
               var render, select;
               $('#search-input').focus();
-              render = function(term, data, type) {
-                return term;
+              render = function(term, data, type, index) {
+                var ret = {
+                  city:function(){
+                    //city name, that's it (remove integers)
+                    return data.title
+                  },
+                  tag: function(){
+                    //highlight term in incident name
+                    return data.title
+                  },
+                  location: function(){
+                    //title location name
+                    //subtitle: incident count
+                    return data.title + "<span class=\"subtitle\">" 
+                    + data.incident_count + " reports</span>"
+                  },
+                  incident: function(){
+                    //title: incident name
+                    //subtitle: date, address
+                    //hasVideo, hasNews, hasPhoto
+                    return data.title + "<span class=\"subtitle\">" 
+                    + data.category_title + " at "
+                    + data.location
+                    + "</span>";
+//                    var re = new RegExp(index, "g");
+//                    return out.replace(re,"<span class=\"search-term\">"+term+"</span>");
+                    
+                  }
+                }
+                var out = ret[type];
+                
+                return out();
+//                return term;
               };
               select = function(term, data, type) {
                 window.location.replace(site_url + data.url);
@@ -89,10 +120,10 @@ if (isset($uri_segments))
               };
               $('#search-input').soulmate({
                 url: 'http://localhost:5678/search',
-                types: ['incident', 'location','city'],
+                types: ['incident', 'location','city','tag'],
                 renderCallback: render,
                 selectCallback: select,
-                minQueryLength: 2,
+                minQueryLength: 3,
                 maxResults: 5
               });
             }).call(this);

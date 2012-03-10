@@ -2764,9 +2764,9 @@ span.btn-icon { display:block; position:absolute; height:16px; width:16px; overf
     font-family:  Arial,"Helvetica Neue", Helvetica, sans-serif;
     font-size: 16px;
     letter-spacing: 0.5px;
-    margin: -7px 3px 0px 0px;
+    margin: -7px 0px 0px 50px;
     padding: 6px 10px;
-    width: 500px;
+    width: 350px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     -ms-border-radius: 4px;
@@ -2784,10 +2784,10 @@ span.btn-icon { display:block; position:absolute; height:16px; width:16px; overf
     margin: 0 0 0 10px;
     padding: 0;
     position: absolute;
-    right:153px;
+    right:150px;
     top: 40px;
     text-shadow: 0 0 0 white;
-    width: 520px;
+    width: 430px;
     z-index: 10001;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -2810,7 +2810,7 @@ span.btn-icon { display:block; position:absolute; height:16px; width:16px; overf
       float: right;
       list-style: none;
       padding: 5px 0;
-      width: 390px;
+      width: 370px;
       letter-spacing: 0.5px; }
     #soulmate .soulmate-suggestion {
       color: #111;
@@ -2846,7 +2846,7 @@ span.btn-icon { display:block; position:absolute; height:16px; width:16px; overf
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       font-size: 11px;
       letter-spacing: 0.5px;
-      margin-right: 390px;
+      margin-right: 370px;
       padding: 10px 10px 0 10px;
       text-align: right;
       text-transform: capitalize;
@@ -2863,3 +2863,42 @@ span.btn-icon { display:block; position:absolute; height:16px; width:16px; overf
         display: table; }
       #soulmate .soulmate-type:after {
         clear: both; }
+
+        #soulmate .subtitle {
+          color:#999;
+          font-size:10px;
+          display:block;
+        }
+        
+        #soulmate .search-term {
+          background-color:#ffc;
+        }
+      /*icons for search types */
+      #soulmate .location, #soulmate .incident, #soulmate .city, #soulmate .tag {
+        width:40px;
+        float:none;
+      
+      #soulmate .incident {
+        background-image: url('http://map.occupy.net/media/uploads/category_5_1321690256.png');
+        background-repeat: no-repeat;
+        background-size:48px 48px;
+        background-position:6px 6px;
+      }
+      
+      #soulmate .location {
+        background-image: url('https://twimg0-a.akamaihd.net/profile_images/1872730484/Screen_shot_2012-03-04_at_2.01.55_PM_reasonably_small.JPG');
+        background-repeat: no-repeat;
+        background-size:48px 48px;
+      }
+      
+      #soulmate .tag {
+        background-image:url('http://map.occupy.net/media/uploads/category_1_1321690237.png');
+        background-repeat: no-repeat;
+        background-size:48px 48px;
+      }
+      #soulmate .city {
+        background-image: url('https://twimg0-a.akamaihd.net/profile_images/1790807017/Screen_shot_2012-01-29_at_6.31.38_PM_reasonably_small.JPG');
+        background-repeat: no-repeat;
+        background-size:48px 48px;
+      }
+      */

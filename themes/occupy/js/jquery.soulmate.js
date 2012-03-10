@@ -14,7 +14,10 @@
     }
 
     Query.prototype.getValue = function() {
-      return this.value;
+      //somebody has a problem with the hashtag character so we replace it
+      //note = move this to inline code
+      var val = this.value.replace("#","");
+      return val;
     };
 
     Query.prototype.setValue = function(newValue) {
@@ -193,7 +196,7 @@
     };
 
     SuggestionCollection.prototype._renderTypeEnd = function(type) {
-      return "  </ul>\n  <div class=\"soulmate-type\">" + type + "</div>\n</li>";
+      return "  </ul>\n  <div class=\"soulmate-type "+ type +"\">" + type + "</div>\n</li>";
     };
 
     SuggestionCollection.prototype._renderSuggestion = function(suggestion) {
