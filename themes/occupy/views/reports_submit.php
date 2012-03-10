@@ -145,10 +145,12 @@
 			</div>
 			<div class="report_right">
 				<?php if ( ! $multi_country AND count($cities) > 1){ ?>
+				<!--
 				<div class="report_row">
-					<h4><?php echo Kohana::lang('ui_main.reports_find_location'); ?></h4>
-					<?php print form::dropdown('select_city',$cities,'', ' class="select" '); ?>
+					<h4><?php //echo Kohana::lang('ui_main.reports_find_location'); ?></h4>
+					<?php //print form::dropdown('select_city',$cities,'', ' class="select" '); ?>
 				</div>
+				-->
 				<?php } ?>
 				<div class="report_row">
 					<div id="divMap" class="report_map">
