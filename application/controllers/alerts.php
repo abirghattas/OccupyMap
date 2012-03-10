@@ -284,7 +284,7 @@ class Alerts_Controller extends Main_Controller {
 	 */
 	private function _get_cities()
 	{
-		$cities = ORM::factory('city')->orderby('city', 'asc')->find_all();
+		$cities = ORM::factory('city')->orderby('city', 'asc')->limit(10)->find_all();
 		$city_select = array('' => Kohana::lang('ui_main.alerts_select_city'));
 		
 		foreach ($cities as $city) 

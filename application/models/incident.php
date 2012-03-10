@@ -402,7 +402,6 @@ class Incident_Model extends ORM {
 		// Kohana::log('debug', $sql);
 		// Database instance for the query
 		$db = new Database();
-
 		// Return
 		return $db->query($sql);
 	}
