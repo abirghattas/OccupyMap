@@ -2,6 +2,8 @@
 class City_Controller extends Main_Controller {
 
     public function local($city) {
+	$tag = "map_page_gz";
+        $this->cache->delete_tag($tag);
         $city = urldecode($city);
         $city = ORM::factory("city")->where("city",$city)->find();
         Kohana::config_set('settings.local_city',$city);
@@ -16,7 +18,9 @@ class City_Controller extends Main_Controller {
     }
    
     public function none() {
-        $this->session->set('city_local',null);
+        $tag = "map_page_gz";
+        $this->cache->delete_tag($tag);
+	$this->session->set('city_local',null);
         url::redirect(url::site());
 
     }
