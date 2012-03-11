@@ -2098,7 +2098,7 @@ p.labeled-divider span { position:relative; top:-8px; display:inline-block; back
     
 .reports-box .hover { background:#fffded; }
     
-.r_media { float:left; width:95px; margin:3px 15px 3px 3px; }
+.r_media { float:left; width:65px; margin:3px 15px 3px 3px; }
 .r_photo a { display:inline-block; padding: 2px; border:1px solid #c0c2b8;}
 .r_video { }
 .r_video a { display:inline-block; font-size:11px; background:transparent url(../../default/images/icon_sprite.png) -3px -100px no-repeat; padding:4px 0 3px 23px; }
@@ -2765,7 +2765,7 @@ span.btn-icon { display:block; position:absolute; height:16px; width:16px; overf
     font-size: 16px;
     letter-spacing: 0.5px;
     margin: -7px 0px 0px 50px;
-    padding: 6px 10px;
+    padding: 6px;
     width: 350px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;

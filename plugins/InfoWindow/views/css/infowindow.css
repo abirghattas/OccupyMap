@@ -63,7 +63,7 @@ a.iconic:hover {
 ---------------------------------------------------------------------------*/
 #iw{
 	padding:2px 0 0 5px;
-	min-height: 200px;
+	min-height: 345px;
 	width: 400px;
 	position:relative;
 	}
@@ -192,7 +192,7 @@ a.iconic:hover {
 		padding: 5px;
 	}
 	#iw-tabs .iw_tab{
-		height:100px;
+		height:200px;
 		overflow:auto;
 		overflow-x:hidden;
 		padding-top:4px;
@@ -443,6 +443,6 @@ tweak to fit the whole info window
 */
 
 #iw-bubble_contentDiv { 
-  min-height:360px !important;
-  width:480px !important;
+  min-height:540px !important;
+  width:600px !important;
 }
