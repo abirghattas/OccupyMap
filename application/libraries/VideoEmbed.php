@@ -57,8 +57,8 @@ class VideoEmbed
 
         		// Check for autoplay
         		$you_auto = ($auto == "play")? "&autoplay=1" : "";
-		        $size = ($tiny) ?"<object width='160' height='100'>" : "<object width='500' height='315'>";
-		        $size2 = ($tiny) ?"		wmode='transparent' width='150' height='100'>"
+		        $size = ($tiny) ?"<object width='320' height='200'>" : "<object width='500' height='315'>";
+		        $size2 = ($tiny) ?"		wmode='transparent' width='320' height='200'>"
       			: "		wmode='transparent' width='500' height='315'>"
       			;
         		

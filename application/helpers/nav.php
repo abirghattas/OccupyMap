@@ -28,7 +28,7 @@ class nav_Core {
 		// Home
 		if( ! in_array('home',$dontshow))
 		{
-			$menu .= "<li><a href=\"".url::site()."main\" ";
+			$menu .= "<li><a href=\"".url::site()."city/none\" ";
 			$menu .= ($this_page == 'home') ? " class=\"active\"" : "";
 		 	$menu .= ">".Kohana::lang('ui_main.home')."</a></li>";
 		 }

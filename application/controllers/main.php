@@ -184,6 +184,7 @@ class Main_Controller extends Template_Controller {
 		$this->template->content->div_timeline = $div_timeline;
 
 		// Check if there is a site message
+		  //TODO - set a session variable to only show this message once per session
 		$this->template->content->site_message = '';
 		$site_message = trim(Kohana::config('settings.site_message'));
 		if($site_message != '')
@@ -444,7 +445,7 @@ class Main_Controller extends Template_Controller {
     // pdestefanis - allows to restrict the number of zoomlevels available
 		$numZoomLevels = Kohana::config('map.numZoomLevels');
 		$minZoomLevel = Kohana::config('map.minZoomLevel');
-	   	$maxZoomLevel = Kohana::config('map.maxZoomLevel');
+	  $maxZoomLevel = Kohana::config('map.maxZoomLevel');
 
 		// pdestefanis - allows to limit the extents of the map
 		$lonFrom = Kohana::config('map.lonFrom');

@@ -89,7 +89,7 @@
 				<div id="<?php echo $incident_id ?>" class="rb_report <?php echo $incident_verified_class; ?>">
 					<div class="r_media">
 						<p class="r_photo"> <a href="<?php echo url::site(); ?>reports/view/<?php echo $incident_id; ?>">
-							<img src="<?php echo $incident_thumb; ?>" height="59" width="89" /> </a>
+							<img src="<?php echo $incident_thumb; ?>"  width="65" /> </a>
 						</p>
 
 						<!-- Only show this if the report has a video -->
@@ -104,7 +104,7 @@
 								<?php if($category->category_visible == 0) continue; ?>
 						
 								<?php if ($category->category_image_thumb): ?>
-									<?php $category_image = url::base().Kohana::config('upload.relative_directory')."/".$category->category_image_thumb; ?>
+									<?php $category_image = url::base()."/".Kohana::config('upload.relative_directory')."/".$category->category_image_thumb; ?>
 									<a class="r_category" href="<?php echo url::site(); ?>reports/?c=<?php echo $category->id; ?>">
 										<span class="r_cat-box"><img src="<?php echo $category_image; ?>" height="16" width="16" /></span> 
 										<span class="r_cat-desc"><?php echo $localized_categories[(string)$category->category_title];?></span>
