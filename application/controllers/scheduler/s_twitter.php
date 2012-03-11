@@ -142,6 +142,8 @@ class S_Twitter_Controller extends Controller {
 					->find_all()) == 0)
 			{
 				// Save Tweet as Message
+        echo "<pre>";
+				print_r($tweet);
 				$message = new Message_Model();
 				$message->parent_id = 0;
 				$message->incident_id = 0;
@@ -149,13 +151,15 @@ class S_Twitter_Controller extends Controller {
 				$message->reporter_id = $reporter->id;
 				$message->message_from = $tweet->{'from_user'};
 				$message->message_to = null;
-				$message->message = $tweet->{'text'};
+				$message->message_detail = $tweet->{'text'};
+				$message->detail = json_encode($tweet);
 				$message->message_type = 1; // Inbox
 				$tweet_date = date("Y-m-d H:i:s",strtotime($tweet->{'created_at'}));
 				$message->message_date = $tweet_date;
 				$message->service_messageid = $tweet->{'id'};
 				$message->save();
-				
+				exit();
+    		
 				// Action::message_twitter_add - Twitter Message Received!
 				Event::run('ushahidi_action.message_twitter_add', $message);
 				
