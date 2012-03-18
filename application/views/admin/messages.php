@@ -142,9 +142,9 @@
 												<?php
 												if ($message_detail)
 												{
-													?>
-													<p><a href="javascript:preview('message_preview_<?php echo $message_id?>')"><?php echo Kohana::lang('ui_main.preview_message');?></a></p>
-													<div id="message_preview_<?php echo $message_id?>" style="display:none;">
+													?><!--
+													<p><a href="javascript:preview('message_preview_<?php echo $message_id?>')"><?php echo Kohana::lang('ui_main.preview_message');?></a></p>-->
+													<div id="message_preview_<?php echo $message_id?>">
 														<?php echo $message_detail; ?>
 														
 														<?php
