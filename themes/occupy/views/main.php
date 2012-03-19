@@ -25,7 +25,7 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 <div id="main" class="clearingfix">
 	<div id="mainmiddle">
 
-	<?php if($site_message != '') { ?>
+	<?php if($site_message != '' ) { ?>
 		<div class="green-box">
 		  <div class="close">
 		    [x]

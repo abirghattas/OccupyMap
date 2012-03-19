@@ -138,6 +138,10 @@ class Main_Controller extends Template_Controller {
 			? Stats_Model::get_javascript()
 			: '';
 		// add copyright info
+		
+		
+		
+		
 		$this->template->footer->site_copyright_statement = '';
 		$site_copyright_statement = trim(Kohana::config('settings.site_copyright_statement'));
 		if($site_copyright_statement != '')
@@ -206,11 +210,13 @@ class Main_Controller extends Template_Controller {
 		  //TODO - set a session variable to only show this message once per session
 		$this->template->content->site_message = '';
 		$site_message = trim(Kohana::config('settings.site_message'));
-		if($site_message != '')
+		if($site_message != '' && ($this->session->get('message_seen')==false))
 		{
 			$this->template->content->site_message = $site_message;
+		} else {
+		  $this->template->content->site_message = '';
 		}
-
+    $this->session->set('message_seen',true);
 		// Get locale
 		$l = Kohana::config('locale.language.0');
 
