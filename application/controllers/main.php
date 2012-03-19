@@ -162,8 +162,8 @@ class Main_Controller extends Template_Controller {
     join location l on m.location_id = l.id
     where m.media_type=1
     having distance < ".$z."
-    order by distance desc, i.incident_date desc
-    limit ".$page.", 30";
+    order by distance asc, i.incident_date desc
+    limit ".$page.", 40";
     return  $db->query($q);
   }
 
