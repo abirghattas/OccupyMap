@@ -137,7 +137,6 @@ class Main_Controller extends Template_Controller {
 		$this->template->footer->ushahidi_stats = (Kohana::config('settings.allow_stat_sharing') == 1)
 			? Stats_Model::get_javascript()
 			: '';
-		
 		// add copyright info
 		$this->template->footer->site_copyright_statement = '';
 		$site_copyright_statement = trim(Kohana::config('settings.site_copyright_statement'));
@@ -147,6 +146,26 @@ class Main_Controller extends Template_Controller {
 		}
 		
 	}
+  //gets recent media for slideshows
+  
+  function get_media($page=0){    
+    $lat = $this->themes->js->latitude;
+    $lon = $this->themes->js->longitude;
+    $zoom = $this->themes->js->default_zoom+0;
+    $db = new Database();
+    $z = 20000 / (pow(1.8,$zoom));
+    //incident report time nearest in time to selected event
+    $q = "select m.*, i.*, l.*,
+     ((ACOS(SIN(".$lat." * PI() / 180) * SIN(l.`latitude` * PI() / 180) + COS(".$lat." * PI() / 180) * COS(l.`latitude` * PI() / 180) * COS((".$lon." - l.`longitude`) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS distance
+    from media m
+    join incident i on m.incident_id = i.id
+    join location l on m.location_id = l.id
+    where m.media_type=1
+    having distance < ".$z."
+    order by distance desc, i.incident_date desc
+    limit ".$page.", 30";
+    return  $db->query($q);
+  }
 
 	/**
 	 * Retrieves Categories
@@ -430,6 +449,8 @@ class Main_Controller extends Template_Controller {
 		
 		$this->template->content->div_timeline->startDate = $startDate;
 		$this->template->content->div_timeline->endDate = $endDate;
+		
+		
 
 		// Javascript Header
 		$this->themes->map_enabled = TRUE;
@@ -477,18 +498,20 @@ class Main_Controller extends Template_Controller {
 		$this->themes->js->latFrom = $latFrom;
 		$this->themes->js->lonTo = $lonTo;
 		$this->themes->js->latTo = $latTo;
-        if (is_array($this->session->get('city_local'))) {
-            $city = $this->session->get('city_local');
-            $this->themes->js->default_zoom = 12;
-    		$this->themes->js->latitude = $city['city_lat'];
-    		$this->themes->js->longitude = $city['city_lon'];
-        } else {
-    		$this->themes->js->default_zoom = Kohana::config('settings.default_zoom');
-    		$this->themes->js->latitude = Kohana::config('settings.default_lat');
-    		$this->themes->js->longitude = Kohana::config('settings.default_lon');
-        }
+    if (is_array($this->session->get('city_local'))) {
+        $city = $this->session->get('city_local');
+        $this->themes->js->default_zoom = 12;
+		    $this->themes->js->latitude = $city['city_lat'];
+		    $this->themes->js->longitude = $city['city_lon'];
+    } else {
+  		$this->themes->js->default_zoom = Kohana::config('settings.default_zoom');
+  		$this->themes->js->latitude = Kohana::config('settings.default_lat');
+  		$this->themes->js->longitude = Kohana::config('settings.default_lon');
+    }
 
 
+		//slideshow widget 
+		$this->template->content->slideshow = $this->get_media();
 
 		$this->themes->js->default_map = Kohana::config('settings.default_map');
 		$this->themes->js->default_map_all = Kohana::config('settings.default_map_all');
@@ -502,6 +525,7 @@ class Main_Controller extends Template_Controller {
 		//$js = $myPacker->pack();
 
 		// Rebuild Header Block
+		
 		$this->template->header->header_block = $this->themes->header_block();
 	}
 

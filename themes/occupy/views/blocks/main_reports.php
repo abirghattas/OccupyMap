@@ -27,7 +27,7 @@
 		?>
 		<tr>
 			<td><a href="<?php echo url::site() . 'reports/view/' . $incident_id; ?>"> <?php echo $incident_title ?></a></td>
-			<td><?php echo $incident_location ?></td>
+			<td><?php echo $incident_location; ?></td>
 			<td><?php echo $incident_date; ?></td>
 		</tr>
 		<?php

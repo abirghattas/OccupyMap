@@ -1,4 +1,5 @@
-
+<link href="http://localhost:8872/media/css/picbox/picbox.css" type="text/css" rel="stylesheet">
+<script src="http://localhost:8872/media/js/picbox.js" type="text/javascript">
 <script type="text/javascript">
 $(function(){
   
@@ -211,15 +212,34 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 	
 		<!-- content column -->
 		<div id="content" class="clearingfix">
-		  
-
-				<?php								
-				// Map and Timeline Blocks
-				echo $div_map;
-				echo $div_timeline;
-				?>
-			</div>
+		<?php								
+		// Map and Timeline Blocks
+		  echo $div_map;
+    ?>
+    
+		<div id="homepage_slideshow">
+		  <div class="content-block">
+  		  <h5>Photos</h5>
+    		<?php foreach ($slideshow as $slide):?>
+    		  
+            	<?php $prefix = url::base().Kohana::config('upload.relative_directory');?>
+            	<?php $prefix = "http://map.occupy.net/media/uploads";?>
+            	<?php
+            	$s_title = $slide->incident_title;
+            	$s_date = date("l,  F d, Y",strtotime($slide->incident_date));
+            	$s_caption = $s_title . " - " .$s_date;
+            	?>
+            	<a class="photothumb" title = "<?=$s_caption?>" rel="lightbox-group1" href="<?=$prefix?>/<?=$slide->media_link?>"><img class = "thumb" src="<?=$prefix?>/<?=$slide->media_thumb?>"/></a>
+    		<?php endforeach?>
+		    
+		  </div>
+    <?php
+			echo $div_timeline;
+		?>
 		</div>
+		
+		  
+    </div>
 		<!-- / content column -->
 
 	</div>
