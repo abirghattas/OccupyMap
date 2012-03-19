@@ -149,8 +149,8 @@ class Main_Controller extends Template_Controller {
   //gets recent media for slideshows
   
   function get_media($page=0){    
-    $lat = $this->themes->js->latitude;
-    $lon = $this->themes->js->longitude;
+    $lat =( strlen($this->themes->js->latitude)>0) ? $this->themes->js->latitude : 40.0;
+    $lon = (strlen($this->themes->js->longitude) >0 ) ? $this->themes->js->longitude:-70.0;
     $zoom = $this->themes->js->default_zoom+0;
     $db = new Database();
     $z = 20000 / (pow(1.8,$zoom));
