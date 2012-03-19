@@ -215,8 +215,11 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 		<?php								
 		// Map and Timeline Blocks
 		  echo $div_map;
-    ?>
-    
+
+			echo $div_timeline;
+		?>
+		</div>
+		
 		<div id="homepage_slideshow">
 		  <div class="content-block">
   		  <h5>Photos</h5>
@@ -233,13 +236,8 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
     		<?php endforeach?>
 		    
 		  </div>
-    <?php
-			echo $div_timeline;
-		?>
-		</div>
-		
 		  
-    </div>
+      </div>
 		<!-- / content column -->
 
 	</div>
