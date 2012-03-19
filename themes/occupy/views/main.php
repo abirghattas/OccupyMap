@@ -1,5 +1,5 @@
-<link href="http://localhost:8872/media/css/picbox/picbox.css" type="text/css" rel="stylesheet">
-<script src="http://localhost:8872/media/js/picbox.js" type="text/javascript">
+<link href="http://map.occupy.net/media/css/picbox/picbox.css" type="text/css" rel="stylesheet">
+<script src="http://map.occupy.net/media/js/picbox.js" type="text/javascript">
 <script type="text/javascript">
 $(function(){
   
@@ -215,7 +215,7 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 		<?php								
 		// Map and Timeline Blocks
 		  echo $div_map;
-
+      
 			echo $div_timeline;
 		?>
 		</div>
