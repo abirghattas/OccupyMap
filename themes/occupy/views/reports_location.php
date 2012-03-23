@@ -189,14 +189,24 @@ foreach ($videos as $v) {
 	    <?php 
 	    // if there are images, show them
 	      echo '<div id="report-images">';
-          foreach ($incident_photos as $photo)
-          {
-          	$thumb = str_replace(".","_t.",$photo);
-          	$prefix = url::base().Kohana::config('upload.relative_directory');
-          	echo '<a class="photothumb" rel="lightbox-group1" href="'.$prefix.'/'.$photo.'"><img src="'.$prefix.'/'.$thumb.'"/></a> ';
-          };
+
+    	  if (count($incident_photos)==1){
+    		 echo '<div id="report-images">';
+    		$prefix = url::base().Kohana::config('upload.relative_directory');
+    		echo '<a class="photothumb" rel="lightbox-group1" href="'.$prefix.'/'.$incident_photos[0].'"><img style="width:520px" src="'.$prefix.'/'.$incident_photos[0].'"/></a> '; 
+    		echo '</div>';
+    	   }else {
+           foreach ($incident_photos as $photo)
+           {
+           	$thumb = str_replace(".","_t.",$photo);
+           	$prefix = url::base().Kohana::config('upload.relative_directory');
+           	echo '<a class="photothumb" rel="lightbox-group1" href="'.$prefix.'/'.$photo.'"><img src="'.$prefix.'/'.$thumb.'"/></a> ';
+           };
+    	     
+    	   }
+
 				echo '</div>';  
-	    
+
       echo '<div id="report-video">';
 	    // if there are videos, show those too
 	    if( count($incident_videos) > 0 ) 
