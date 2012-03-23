@@ -620,6 +620,7 @@ class Reports_Controller extends Main_Controller {
 			$this->template->content->incident_title = $incident_title;
 			$this->template->content->incident_description = $incident_description;
 			$this->template->content->incident_location = $incident->location->location_name;
+			$this->template->content->incident_location_id = $incident->location->id;
 			$this->template->content->incident_latitude = $incident->location->latitude;
 			$this->template->content->incident_longitude = $incident->location->longitude;
 			$this->template->content->incident_date = date('M j Y', strtotime($incident->incident_date));
@@ -793,15 +794,13 @@ class Reports_Controller extends Main_Controller {
 				url::redirect('reports/view/');
 			}
       $this->template->content->location = $location;
-      $an_incident = null;
-      foreach ($location->incident as $incident) {
-        $an_incident = $incident;
-      }
+      $incident = $location->incident[0];
+      $an_incident = $location->incident[0];
       $neighbors = Incident_Model::get_neighbouring_incidents($an_incident->id, FALSE, 0.125, 100);
     
 //      $this->template->content->incident_neighbors =Incident_Model::get_neighbouring_incidents($an_incident->id, TRUE, 0,25);
       $this->template->content->neighbors = $neighbors;
-  		
+      $this->template->content->an_incident = $an_incident;
   		
   		// Add Neighbors
   		$this->template->content->incident_neighbors = Incident_Model::get_neighbouring_incidents($incident->id, TRUE, 0, 5);
@@ -1252,7 +1251,7 @@ class Reports_Controller extends Main_Controller {
          join incident i on m.incident_id = i.id
          join location l on m.location_id = l.id
          where m.media_type=".$type." 
-         having distance < 0.25
+         having distance < 0.125
          order by i.incident_date desc, distance asc
          limit ".$page.", 40";
          return  $db->query($q);

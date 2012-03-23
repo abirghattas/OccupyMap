@@ -31,6 +31,7 @@
       <?php } ?>
 		</div>
 -->
+<?php if (count($slideshow)>0):?>
 <div id="homepage_slideshow">
   <div class="content-block">
 	  <h5>Photos</h5>
@@ -48,8 +49,8 @@
 		<?php endforeach?>
     
   </div>
-  
 </div>
+<?php endif?>
 <style type="text/css">
   #video_slideshow {
    margin-bottom:20px;
@@ -70,20 +71,21 @@
     display:block;
   }
 </style>
+<?php
+$vids = array();
+foreach ($videos as $v) {
+  $embed_code = $videos_embed->embed($v->media_link,'', true);
+	if (strpos($embed_code,"<embed")) {
+	  $vids[] = $v;
+  }
+}
+?>
 
+<?php if (count($vids)>0):?>
 <div id="video_slideshow">
   <div class="content-block">
 	  <h5>Videos</h5>
     <div class="container">
-    <?php
-    $vids = array();
-    foreach ($videos as $v) {
-      $embed_code = $videos_embed->embed($v->media_link,'', true);
-    	if (strpos($embed_code,"<embed")) {
-    	  $vids[] = $v;
-      }
-    }
-    ?>
 	  <div class="wrapper" style="width:<?=count($vids) * 330?>px">
 
   		<?php foreach ($vids as $slide):?>
@@ -114,7 +116,7 @@
   </div>
   
 </div>
-
+<?php endif?>
 
 
 	</div>
@@ -375,19 +377,32 @@
       padding:5px;
     }
   </style>
-	<div id="incidents_list" class="incidents">
-	  <?php foreach ($neighbors as $neighbor): 
+
+  
+  <?php 
+  //have to stick the initial incident back on the neighboring incidents list.
+  //which is still an orm object so you can't use array push
+  $incident_list = array();
+
+  $incident_list[] = $an_incident;
+  foreach ($neighbors as $neighbor){
+    $incident_list[] = $neighbor;
+  }
+  ?>
+  
+	<div id="incidents_list" class="incidents report-additional-reports">
+	  <?php foreach ($incident_list as $neighbor): 
 	  //has video
     //has photo
     //show category
 	  ?>
-    <div class="incident">
+    <div class="incident rb_report">
   	  <div class="title">
-  	   <a href="javascript:void(0)" class="load-incident" rel="<?=$neighbor->id?>"><?=$neighbor->incident_title?></a>
+  	   <h5><a href="javascript:void(0)" class="load-incident" rel="<?=$neighbor->id?>"><?=$neighbor->incident_title?></a></h5>
   	  </div>
-      <div class="date">
+      <p class="r_date">
         <?=$neighbor->incident_date?>
-      </div>
+      </p>
       
     </div>
     
