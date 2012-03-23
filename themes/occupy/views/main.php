@@ -237,7 +237,7 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 		    
 		  </div>
 		  
-      </div>
+    </div>
 		<!-- / content column -->
 
 	</div>

@@ -401,7 +401,13 @@ class Incidents_Api_Object extends Api_Object_Core {
 			$media_items[$media_item->incident_id][$i]['mediaid'] = $media_item->mediaid;
 			$media_items[$media_item->incident_id][$i]['mediatitle'] = $media_item->mediatitle;
 			$media_items[$media_item->incident_id][$i]['mediatype'] = $media_item->mediatype;
-			$media_items[$media_item->incident_id][$i]['medialink'] = $media_item->medialink;
+      //generate video embed codes...
+			if ($media_item->mediatype=="2"){
+				$media_items[$media_item->incident_id][$i]['medialink'] =  
+			  VideoEmbed::embed($media_item->medialink,null,true);
+			} else {
+  			$media_items[$media_item->incident_id][$i]['medialink'] = $media_item->medialink;
+			}
 			$media_items[$media_item->incident_id][$i]['mediathumb'] = $media_item->mediathumb;
 			$i++;
 		}

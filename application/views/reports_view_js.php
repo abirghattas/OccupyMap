@@ -65,6 +65,7 @@
 				strokeWidth: "${strokewidth}",
 				graphicZIndex: 1,
 				externalGraphic: "${graphic}",
+        //fade out 5% for every 2^n hours old
 				graphicOpacity: 1,
 				graphicWidth: 25,
 				graphicHeight: 25,
@@ -76,7 +77,9 @@
 				{
 					graphic: function(feature)
 					{
-					  return categoryMarkers[feature.data.category[0]];
+					  if ( categoryMarkers[feature.data.category[0]]) {
+  					  return categoryMarkers[feature.data.category[0]];
+					  }
 						if ( typeof(feature) != 'undefined' && 
 						
 							feature.data.id == <?php echo $incident_id; ?>)
@@ -146,7 +149,7 @@
 			});
 			
 			map.addLayer(markers);
-			
+		
 			selectCtrl = new OpenLayers.Control.SelectFeature(markers, {
 				onSelect: onFeatureSelect, 
 				onUnselect: onFeatureUnselect

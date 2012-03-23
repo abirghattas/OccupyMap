@@ -81,6 +81,14 @@
 				echo '</div>';  
 	    }
 	    
+	    if (count($incident_photos)==1){
+        echo '<div id="report-images">';
+        $prefix = url::base().Kohana::config('upload.relative_directory');
+        echo '<a class="photothumb" rel="lightbox-group1" href="'.$prefix.'/'.$incident_photos[0].'"><img style="width:520px" src="'.$prefix.'/'.$incident_photos[0].'"/></a> '; 
+        echo '</div>';
+      }
+      
+	    
 	    // if there are videos, show those too
 	    if( count($incident_videos) > 0 ) 
 	    { 

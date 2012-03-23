@@ -149,8 +149,8 @@ class S_Twitter_Controller extends Controller {
 				$message->reporter_id = $reporter->id;
 				$message->message_from = $tweet->{'from_user'};
 				$message->message_to = null;
-				$message->message_detail = $tweet->{'text'};
-				$message->detail = json_encode($tweet);
+				$message->message = $tweet->{'text'};
+				$message->messge_detail = json_encode($tweet);
 				$message->message_type = 1; // Inbox
 				$tweet_date = date("Y-m-d H:i:s",strtotime($tweet->{'created_at'}));
 				$message->message_date = $tweet_date;

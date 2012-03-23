@@ -625,6 +625,8 @@ class Reports_Controller extends Main_Controller {
 			$this->template->content->incident_date = date('M j Y', strtotime($incident->incident_date));
 			$this->template->content->incident_time = date('H:i', strtotime($incident->incident_date));
 			$this->template->content->incident_category = $incident->incident_category;
+
+      //get the category images for the map overlay
       $category_images = array();
       $cats = ORM::factory('category')
   	    ->where('category_visible', '1')
@@ -762,6 +764,205 @@ class Reports_Controller extends Main_Controller {
 		// Rebuild Header Block
 		$this->template->header->header_block = $this->themes->header_block();
 	}
+
+  //displays the report detail as an html partial, for ajax calls
+  public function ajax_detail($id=FALSE)
+  {
+    
+  }
+
+	//displays a modified incident page centered around a report and 
+	public function view_location($id = FALSE)
+	{
+		$this->template->header->this_page = 'reports';
+		$this->template->content = new View('reports_location');
+
+    //location id, then grab incidents from that location (text match / time space match)
+
+		if ( ! Location_Model::is_valid_location($id, TRUE))
+		{
+			url::redirect('main');
+		}
+		else
+		{
+		  $location = ORM::factory('location')
+		    ->where('id',$id)
+		    ->find();
+			if ( $location->id == 0 )	// Not Found
+			{
+				url::redirect('reports/view/');
+			}
+      $this->template->content->location = $location;
+      $an_incident = null;
+      foreach ($location->incident as $incident) {
+        $an_incident = $incident;
+      }
+      $neighbors = Incident_Model::get_neighbouring_incidents($an_incident->id, FALSE, 0.125, 100);
+    
+//      $this->template->content->incident_neighbors =Incident_Model::get_neighbouring_incidents($an_incident->id, TRUE, 0,25);
+      $this->template->content->neighbors = $neighbors;
+  		
+  		
+  		// Add Neighbors
+  		$this->template->content->incident_neighbors = Incident_Model::get_neighbouring_incidents($incident->id, TRUE, 0, 5);
+  		$this->template->content->slideshow = $this->_get_media_location($location->id, $location->latitude, $location->longitude, 1);
+  		$this->template->content->videos = $this->_get_media_location($location->id, $location->latitude, $location->longitude, 2);
+      //build an array of tags from tags table
+      //for each incident
+      //get tags
+      //tally and build tag cloud
+      
+      
+			// Filters
+			$incident_title = $incident->incident_title;
+			$incident_description = nl2br($incident->incident_description);
+			Event::run('ushahidi_filter.report_title', $incident_title);
+			Event::run('ushahidi_filter.report_description', $incident_description);
+			
+			// Add Features
+			$this->template->content->features_count = $incident->geometry->count();
+			$this->template->content->features = $incident->geometry;
+			$this->template->content->incident_id = $incident->id;
+			$this->template->content->incident_title = $incident_title;
+			$this->template->content->incident_description = $incident_description;
+			$this->template->content->incident_location = $location->location_name;
+			$this->template->content->incident_latitude = $location->latitude;
+			$this->template->content->incident_longitude = $location->longitude;
+			$this->template->content->incident_date = date('M j Y', strtotime($incident->incident_date));
+			$this->template->content->incident_time = date('H:i', strtotime($incident->incident_date));
+			$this->template->content->incident_category = $incident->incident_category;
+      $category_images = array();
+      $cats = ORM::factory('category')
+  	    ->where('category_visible', '1')
+  	    ->where('parent_id', '0')
+  	    ->where('category_trusted != 1')
+  	    ->orderby('category_title', 'ASC')
+  	    ->find_all();
+
+
+      //load category icons
+      foreach ($cats as $c) {
+        $image_url = $c->category_image;
+        if (strlen($c->category_image) > 1) {
+          $image_url = $c->category_image;
+          $image_url = url::file_loc('img').'media/uploads/'.$image_url;
+          
+        } else {
+          $image_url =  url::file_loc('img').'media/img/openlayers/marker-gold.png';
+        }
+
+        $category_images[$c->id] = $image_url;
+
+        $subcats = ORM::factory('category')
+    	    ->where('category_visible', '1')
+    	    ->where('parent_id', $c->id)
+    	    ->where('category_trusted != 1')
+    	    ->orderby('category_title', 'ASC')
+    	    ->find_all();
+
+        
+        foreach ($subcats as $sc) {
+          $image_url = $c->category_image;
+          $image_url = url::file_loc('img').'media/uploads/'.$image_url;
+
+          if (strlen($sc->category_image) > 1) {
+            $image_url = $sc->category_image;
+            $image_url = url::file_loc('img').'media/uploads/'.$image_url;
+          }
+            $category_images[$sc->id] = $image_url;
+        }
+      }
+      $this->template->content->category_images = $category_images;
+      
+			// Incident rating
+			$this->template->content->incident_rating = ($incident->incident_rating == '')
+				? 0
+				: $incident->incident_rating;
+
+			// Retrieve Media
+			$incident_news = array();
+			$incident_video = array();
+			$incident_photo = array();
+
+			foreach($incident->media as $media)
+			{
+				if ($media->media_type == 4)
+				{
+					$incident_news[] = $media->media_link;
+				}
+				elseif ($media->media_type == 2)
+				{
+					$incident_video[] = $media->media_link;
+				}
+				elseif ($media->media_type == 1)
+				{
+					$incident_photo[] = $media->media_link;
+				}
+			}
+
+			$this->template->content->incident_verified = $incident->incident_verified;
+
+			// Retrieve Comments (Additional Information)
+			$this->template->content->comments = "";
+			if (Kohana::config('settings.allow_comments'))
+			{
+				$this->template->content->comments = new View('reports_comments');
+				$incident_comments = array();
+				if ($id)
+				{
+					$incident_comments = Incident_Model::get_comments($id);
+				}
+				$this->template->content->comments->incident_comments = $incident_comments;
+			}
+		}
+
+		// Add Neighbors
+		$this->template->content->incident_neighbors = Incident_Model::get_neighbouring_incidents($id, TRUE, 0, 5);
+		
+		// News Source links
+		$this->template->content->incident_news = $incident_news;
+
+
+		// Video links
+		$this->template->content->incident_videos = $incident_video;
+
+		// Images
+		$this->template->content->incident_photos = $incident_photo;
+
+		// Create object of the video embed class
+		$video_embed = new VideoEmbed();
+		$this->template->content->videos_embed = $video_embed;
+
+		// Javascript Header
+		$this->themes->map_enabled = TRUE;
+		$this->themes->photoslider_enabled = TRUE;
+		$this->themes->videoslider_enabled = TRUE;
+		$this->themes->js = new View('reports_view_js');
+		$this->themes->js->incident_id = $incident->id;
+		$this->themes->js->default_map = Kohana::config('settings.default_map');
+		$this->themes->js->default_zoom = Kohana::config('settings.default_zoom');
+		
+		$this->themes->js->default_zoom = 16;
+    $this->themes->js->latitude = $incident->location->latitude;
+		$this->themes->js->longitude = $incident->location->longitude;
+		$this->themes->js->incident_zoom = 16;
+		$this->themes->js->incident_photos = $incident_photo;
+
+		// Initialize custom field array
+		$this->template->content->custom_forms = new View('reports_view_custom_forms');
+		$form_field_names = customforms::get_custom_form_fields($id, $incident->form_id, FALSE, "view");
+		$this->template->content->custom_forms->form_field_names = $form_field_names;
+
+
+		// If the Admin is Logged in - Allow for an edit link
+		$this->template->content->logged_in = $this->logged_in;
+
+		// Rebuild Header Block
+		$this->template->header->header_block = $this->themes->header_block();
+	}
+
+
+
 
 	/**
 	 * Report Thanks Page
@@ -1039,6 +1240,22 @@ class Reports_Controller extends Main_Controller {
 
 		$form_fields = customforms::switcheroo($incident_id,$form_id);
         echo json_encode(array("status"=>"success", "response"=>$form_fields));
+    }
+    
+
+    private function _get_media_location($id=1, $lat = 40, $lon = -70, $type =1,$page=0) {
+         $db = new Database();
+         //incident report time nearest in time to selected event
+         $q = "select m.*, i.*, l.*,
+          ((ACOS(SIN(".$lat." * PI() / 180) * SIN(l.`latitude` * PI() / 180) + COS(".$lat." * PI() / 180) * COS(l.`latitude` * PI() / 180) * COS((".$lon." - l.`longitude`) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS distance
+         from media m
+         join incident i on m.incident_id = i.id
+         join location l on m.location_id = l.id
+         where m.media_type=".$type." 
+         having distance < 0.25
+         order by i.incident_date desc, distance asc
+         limit ".$page.", 40";
+         return  $db->query($q);
     }
 
 }

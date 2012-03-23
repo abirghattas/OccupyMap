@@ -468,9 +468,11 @@ class Incident_Model extends ORM {
 				. "AND i.id <> ".$incident_id." ";
 
 			// Check if the distance has been specified
-			if (intval($distance) > 0)
+	      //intval changed to floatval - no way around this one - we might want to query neighbors closer than one km, especially in urban areas 
+			if (floatval($distance) > 0)
 			{
-				$sql .= "HAVING distance <= ".intval($distance)." ";
+
+				$sql .= "HAVING distance <= ".floatval($distance)." ";
 			}
 
 			// If the order by distance parameter is TRUE
