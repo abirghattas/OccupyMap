@@ -119,7 +119,7 @@ if (isset($uri_segments))
 
               };
               $('#search-input').soulmate({
-                url: 'http://localhost:5678/search',
+                url: 'http://map.occupy.net:5656/search',
                 types: ['incident', 'location','city','tag'],
                 renderCallback: render,
                 selectCallback: select,
