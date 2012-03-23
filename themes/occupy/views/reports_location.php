@@ -384,10 +384,11 @@ foreach ($videos as $v) {
   //which is still an orm object so you can't use array push
   $incident_list = array();
 
-  $incident_list[] = $an_incident;
   foreach ($neighbors as $neighbor){
     $incident_list[] = $neighbor;
   }
+  $incident_list[] = $an_incident;
+
   ?>
   
 	<div id="incidents_list" class="incidents report-additional-reports">

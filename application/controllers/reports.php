@@ -791,16 +791,30 @@ class Reports_Controller extends Main_Controller {
 		    ->find();
 			if ( $location->id == 0 )	// Not Found
 			{
-				url::redirect('reports/view/');
+				url::redirect('reports/');
 			}
       $this->template->content->location = $location;
-      $incident = $location->incident[0];
-      $an_incident = $location->incident[0];
+      //base incident is the first / newest one
+      $incidents = array();
+      foreach ($location->incident as $incident) {
+        $incidents[] = $incident;
+      }
+      $an_incident = $incidents[0];
+     
       $neighbors = Incident_Model::get_neighbouring_incidents($an_incident->id, FALSE, 0.125, 100);
-    
+      $nabs = array();
+      foreach ($neighbors as $neighbor) {
+        $nabs[] = $neighbor;
+      }
+      $most_recent_incident = $nabs[0];
+      $incident = ORM::factory('incident')
+        ->where('id',$most_recent_incident->id)
+        ->find();
+      $this->template->content->an_incident = $an_incident;
+
 //      $this->template->content->incident_neighbors =Incident_Model::get_neighbouring_incidents($an_incident->id, TRUE, 0,25);
       $this->template->content->neighbors = $neighbors;
-      $this->template->content->an_incident = $an_incident;
+  		
   		
   		// Add Neighbors
   		$this->template->content->incident_neighbors = Incident_Model::get_neighbouring_incidents($incident->id, TRUE, 0, 5);
