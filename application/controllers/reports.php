@@ -28,6 +28,7 @@ class Reports_Controller extends Main_Controller {
 
 		// Is the Admin Logged In?
 		$this->logged_in = Auth::instance()->logged_in();
+
 	}
 
 	/**
@@ -77,12 +78,8 @@ class Reports_Controller extends Main_Controller {
 
 		if ($category->loaded)
 		{
-			$translated_title = Category_Lang_Model::category_title($category_id,$l);
-			
 			// Set the category title
-			$this->template->content->category_title = ($translated_title)
-				? $translated_title
-				: $category->category_title;
+			$this->template->content->category_title = Category_Lang_Model::category_title($category_id,$l);
 		}
 		else
 		{
@@ -96,10 +93,25 @@ class Reports_Controller extends Main_Controller {
 		$total_reports = Incident_Model::get_total_reports(TRUE);
 
 		// Get the date of the oldest report
-		$oldest_timestamp = Incident_Model::get_oldest_report_timestamp();
+		if (isset($_GET['s']) AND !empty($_GET['s']) AND intval($_GET['s']) > 0)
+		{
+			$oldest_timestamp =  intval($_GET['s']);
+		}
+		else
+		{
+			$oldest_timestamp = Incident_Model::get_oldest_report_timestamp();
+		}
 		
-		// Get the date of the latest report
-		$latest_timestamp = Incident_Model::get_latest_report_timestamp();
+		//Get the date of the latest report
+		if (isset($_GET['e']) AND !empty($_GET['e']) AND intval($_GET['e']) > 0)
+		{
+			$latest_timestamp = intval($_GET['e']);
+		}
+		else
+		{
+			$latest_timestamp = Incident_Model::get_latest_report_timestamp();
+		}
+
 
 		// Round the number of days up to the nearest full day
 		$days_since = ceil((time() - $oldest_timestamp) / 86400);
@@ -113,6 +125,9 @@ class Reports_Controller extends Main_Controller {
 		$this->template->content->category_tree_view = category::get_category_tree_view();
 		
 		// Additional view content
+		$this->template->content->custom_forms_filter = new View('reports_submit_custom_forms');
+		$disp_custom_fields = customforms::get_custom_form_fields();		
+		$this->template->content->custom_forms_filter->disp_custom_fields = $disp_custom_fields;
 		$this->template->content->oldest_timestamp = $oldest_timestamp;
 		$this->template->content->latest_timestamp = $latest_timestamp;
 		$this->template->content->report_stats->total_reports = $total_reports;
@@ -139,7 +154,7 @@ class Reports_Controller extends Main_Controller {
 		
 		// Fetch all incidents
 		$all_incidents = reports::fetch_incidents();
-	  
+		
 		// Pagination
 		$pagination = new Pagination(array(
 				'style' => 'front-end-reports',
@@ -147,8 +162,10 @@ class Reports_Controller extends Main_Controller {
 				'items_per_page' => (int) Kohana::config('settings.items_per_page'),
 				'total_items' => $all_incidents->count()
 				));
+
 		// Reports
 		$incidents = Incident_Model::get_incidents(reports::$params, $pagination);
+		
 		// Swap out category titles with their proper localizations using an array (cleaner way to do this?)
 		$localized_categories = array();
 		foreach ($incidents as $incident)
@@ -159,12 +176,7 @@ class Reports_Controller extends Main_Controller {
 				$ct = (string)$category->category_title;
 				if ( ! isset($localized_categories[$ct]))
 				{
-					$translated_title = Category_Lang_Model::category_title($category->id, $locale);
-					$localized_categories[$ct] = $category->category_title;
-					if ($translated_title)
-					{
-						$localized_categories[$ct] = $translated_title;
-					}
+					$localized_categories[$ct] = Category_Lang_Model::category_title($category->id, $locale);
 				}
 			}
 		}
@@ -181,6 +193,7 @@ class Reports_Controller extends Main_Controller {
 		// Set the next and previous page numbers
 		$report_listing->next_page = $pagination->next_page;
 		$report_listing->previous_page = $pagination->previous_page;
+
 		if ($pagination->total_items > 0)
 		{
 			$current_page = ($pagination->sql_offset/ $pagination->items_per_page) + 1;
@@ -205,6 +218,7 @@ class Reports_Controller extends Main_Controller {
 		{
 			$report_listing->stats_breadcrumb = '('.$pagination->total_items.' report'.$plural.')';
 		}
+		
 		// Return
 		return $report_listing;
 	}
@@ -213,6 +227,7 @@ class Reports_Controller extends Main_Controller {
 	{
 		$this->template = "";
 		$this->auto_render = FALSE;
+		
 		if ($_GET)
 		{
 			$report_listing_view = $this->_get_report_listing_view();
@@ -244,8 +259,7 @@ class Reports_Controller extends Main_Controller {
 		$this->template->api_url = Kohana::config('settings.api_url');
 
 		// Setup and initialize form field names
-		$form = array
-		(
+		$form = array(
 			'incident_title' => '',
 			'incident_description' => '',
 			'incident_date' => '',
@@ -262,6 +276,7 @@ class Reports_Controller extends Main_Controller {
 			'incident_news' => array(),
 			'incident_video' => array(),
 			'incident_photo' => array(),
+			'incident_zoom' => '',
 			'person_first' => '',
 			'person_last' => '',
 			'person_email' => '',
@@ -334,8 +349,18 @@ class Reports_Controller extends Main_Controller {
 
 				// Action::report_add/report_submit - Added a New Report
 				//++ Do we need two events for this? Or will one suffice?
-				Event::run('ushahidi_action.report_add', $incident);
+				//ETHERTON: Yes. Those of us who often write plugins for
+				//Ushahidi would like to have access to the $post arrays
+				//and the report object. Back in the day we even had access
+				//to the $post object, so if our plugins didn't get the 
+				//appropriate input we could raise an error, but alas,
+				//those days are gone. Now I suppose you could do something
+				//like Event::run('ushahidi_action.report_add', array($post, $incident));
+				//but for the sake of backward's compatibility, please don't
+				//Thanks.
 				Event::run('ushahidi_action.report_submit', $post);
+				Event::run('ushahidi_action.report_add', $incident);
+				
 
 				url::redirect('reports/thanks');
 			}
@@ -392,14 +417,8 @@ class Reports_Controller extends Main_Controller {
 		$this->themes->js->default_zoom = Kohana::config('settings.default_zoom');
 		if (!$form['latitude'] OR !$form['latitude'])
 		{
-	    	if (is_array($this->session->get('city_local'))) {
-                $city = $this->session->get('city_local');
-            	$this->themes->js->latitude = $city['city_lat'];
-        		$this->themes->js->longitude = $city['city_lon'];
-            } else {
-        		$this->themes->js->latitude = Kohana::config('settings.default_lat');
-        		$this->themes->js->longitude = Kohana::config('settings.default_lon');
-            }
+			$this->themes->js->latitude = Kohana::config('settings.default_lat');
+			$this->themes->js->longitude = Kohana::config('settings.default_lon');
 		}
 		else
 		{
@@ -424,20 +443,19 @@ class Reports_Controller extends Main_Controller {
 		$this->template->content = new View('reports_view');
 
 		// Load Akismet API Key (Spam Blocker)
-
 		$api_akismet = Kohana::config('settings.api_akismet');
-
-		if ( ! Incident_Model::is_valid_incident($id, TRUE))
-		{
-			url::redirect('main');
-		}
-		else
+		
+		// Sanitize the report id before proceeding
+		$id = intval($id);
+		
+		if ($id > 0 AND Incident_Model::is_valid_incident($id,FALSE))
 		{
 			$incident = ORM::factory('incident')
 				->where('id',$id)
 				->where('incident_active',1)
 				->find();
-			if ( $incident->id == 0 )	// Not Found
+			
+			if ( ! $incident->loaded)	// Not Found
 			{
 				url::redirect('reports/view/');
 			}
@@ -445,8 +463,7 @@ class Reports_Controller extends Main_Controller {
 			// Comment Post?
 			// Setup and initialize form field names
 
-			$form = array
-			(
+			$form = array(
 				'comment_author' => '',
 				'comment_description' => '',
 				'comment_email' => '',
@@ -620,55 +637,12 @@ class Reports_Controller extends Main_Controller {
 			$this->template->content->incident_title = $incident_title;
 			$this->template->content->incident_description = $incident_description;
 			$this->template->content->incident_location = $incident->location->location_name;
-			$this->template->content->incident_location_id = $incident->location->id;
 			$this->template->content->incident_latitude = $incident->location->latitude;
 			$this->template->content->incident_longitude = $incident->location->longitude;
 			$this->template->content->incident_date = date('M j Y', strtotime($incident->incident_date));
 			$this->template->content->incident_time = date('H:i', strtotime($incident->incident_date));
 			$this->template->content->incident_category = $incident->incident_category;
 
-      //get the category images for the map overlay
-      $category_images = array();
-      $cats = ORM::factory('category')
-  	    ->where('category_visible', '1')
-  	    ->where('parent_id', '0')
-  	    ->where('category_trusted != 1')
-  	    ->orderby('category_title', 'ASC')
-  	    ->find_all();
-      
-      foreach ($cats as $c) {
-        $image_url = $c->category_image;
-        if (strlen($c->category_image) > 1) {
-          $image_url = $c->category_image;
-          $image_url = url::file_loc('img').'media/uploads/'.$image_url;
-          
-        } else {
-          $image_url =  url::file_loc('img').'media/img/openlayers/marker-gold.png';
-        }
-
-        $category_images[$c->id] = $image_url;
-
-        $subcats = ORM::factory('category')
-    	    ->where('category_visible', '1')
-    	    ->where('parent_id', $c->id)
-    	    ->where('category_trusted != 1')
-    	    ->orderby('category_title', 'ASC')
-    	    ->find_all();
-
-        
-        foreach ($subcats as $sc) {
-          $image_url = $c->category_image;
-          $image_url = url::file_loc('img').'media/uploads/'.$image_url;
-
-          if (strlen($sc->category_image) > 1) {
-            $image_url = $sc->category_image;
-            $image_url = url::file_loc('img').'media/uploads/'.$image_url;
-          }
-            $category_images[$sc->id] = $image_url;
-        }
-      }
-      $this->template->content->category_images = $category_images;
-      
 			// Incident rating
 			$this->template->content->incident_rating = ($incident->incident_rating == '')
 				? 0
@@ -691,7 +665,10 @@ class Reports_Controller extends Main_Controller {
 				}
 				elseif ($media->media_type == 1)
 				{
-					$incident_photo[] = $media->media_link;
+					$incident_photo[] = array(
+											'large' => url::convert_uploaded_to_abs($media->media_link),
+											'thumb' => url::convert_uploaded_to_abs($media->media_thumb)
+											);
 				}
 			}
 
@@ -709,6 +686,10 @@ class Reports_Controller extends Main_Controller {
 				}
 				$this->template->content->comments->incident_comments = $incident_comments;
 			}
+		}
+		else
+		{
+			url::redirect('main');
 		}
 
 		// Add Neighbors
@@ -765,224 +746,6 @@ class Reports_Controller extends Main_Controller {
 		// Rebuild Header Block
 		$this->template->header->header_block = $this->themes->header_block();
 	}
-
-  //displays the report detail as an html partial, for ajax calls
-  public function ajax_detail($id=FALSE)
-  {
-    
-  }
-
-	//displays a modified incident page centered around a report and 
-	public function view_location($id = FALSE)
-	{
-		$this->template->header->this_page = 'reports';
-		$this->template->content = new View('reports_location');
-
-    //location id, then grab incidents from that location (text match / time space match)
-
-		if ( ! Location_Model::is_valid_location($id, TRUE))
-		{
-			url::redirect('main');
-		}
-		else
-		{
-		  $location = ORM::factory('location')
-		    ->where('id',$id)
-		    ->find();
-			if ( $location->id == 0 )	// Not Found
-			{
-				url::redirect('reports/');
-			}
-      $this->template->content->location = $location;
-      //base incident is the first / newest one
-      $incidents = array();
-      foreach ($location->incident as $incident) {
-        $incidents[] = $incident;
-      }
-      $an_incident = $incidents[0];
-     
-      $neighbors = Incident_Model::get_neighbouring_incidents($an_incident->id, FALSE, 0.125, 100);
-      $nabs = array();
-      foreach ($neighbors as $neighbor) {
-        $nabs[] = $neighbor;
-      }
-      if (count($nabs) >0)
-      {
-        $most_recent_incident = $nabs[0];
-      } 
-      else 
-      {
-        $most_recent_incident = $an_incident;
-      }
-      $incident = ORM::factory('incident')
-        ->where('id',$most_recent_incident->id)
-        ->find();
-      $this->template->content->an_incident = $an_incident;
-
-//      $this->template->content->incident_neighbors =Incident_Model::get_neighbouring_incidents($an_incident->id, TRUE, 0,25);
-      $this->template->content->neighbors = $neighbors;
-  		
-  		
-  		// Add Neighbors
-  		$this->template->content->incident_neighbors = Incident_Model::get_neighbouring_incidents($incident->id, TRUE, 0, 5);
-  		$this->template->content->slideshow = $this->_get_media_location($location->id, $location->latitude, $location->longitude, 1);
-  		$this->template->content->videos = $this->_get_media_location($location->id, $location->latitude, $location->longitude, 2);
-      //build an array of tags from tags table
-      //for each incident
-      //get tags
-      //tally and build tag cloud
-      
-      
-			// Filters
-			$incident_title = $incident->incident_title;
-			$incident_description = nl2br($incident->incident_description);
-			Event::run('ushahidi_filter.report_title', $incident_title);
-			Event::run('ushahidi_filter.report_description', $incident_description);
-			
-			// Add Features
-			$this->template->content->features_count = $incident->geometry->count();
-			$this->template->content->features = $incident->geometry;
-			$this->template->content->incident_id = $incident->id;
-			$this->template->content->incident_title = $incident_title;
-			$this->template->content->incident_description = $incident_description;
-			$this->template->content->incident_location = $location->location_name;
-			$this->template->content->incident_latitude = $location->latitude;
-			$this->template->content->incident_longitude = $location->longitude;
-			$this->template->content->incident_date = date('M j Y', strtotime($incident->incident_date));
-			$this->template->content->incident_time = date('H:i', strtotime($incident->incident_date));
-			$this->template->content->incident_category = $incident->incident_category;
-      $category_images = array();
-      $cats = ORM::factory('category')
-  	    ->where('category_visible', '1')
-  	    ->where('parent_id', '0')
-  	    ->where('category_trusted != 1')
-  	    ->orderby('category_title', 'ASC')
-  	    ->find_all();
-
-
-      //load category icons
-      foreach ($cats as $c) {
-        $image_url = $c->category_image;
-        if (strlen($c->category_image) > 1) {
-          $image_url = $c->category_image;
-          $image_url = url::file_loc('img').'media/uploads/'.$image_url;
-          
-        } else {
-          $image_url =  url::file_loc('img').'media/img/openlayers/marker-gold.png';
-        }
-
-        $category_images[$c->id] = $image_url;
-
-        $subcats = ORM::factory('category')
-    	    ->where('category_visible', '1')
-    	    ->where('parent_id', $c->id)
-    	    ->where('category_trusted != 1')
-    	    ->orderby('category_title', 'ASC')
-    	    ->find_all();
-
-        
-        foreach ($subcats as $sc) {
-          $image_url = $c->category_image;
-          $image_url = url::file_loc('img').'media/uploads/'.$image_url;
-
-          if (strlen($sc->category_image) > 1) {
-            $image_url = $sc->category_image;
-            $image_url = url::file_loc('img').'media/uploads/'.$image_url;
-          }
-            $category_images[$sc->id] = $image_url;
-        }
-      }
-      $this->template->content->category_images = $category_images;
-      
-			// Incident rating
-			$this->template->content->incident_rating = ($incident->incident_rating == '')
-				? 0
-				: $incident->incident_rating;
-
-			// Retrieve Media
-			$incident_news = array();
-			$incident_video = array();
-			$incident_photo = array();
-
-			foreach($incident->media as $media)
-			{
-				if ($media->media_type == 4)
-				{
-					$incident_news[] = $media->media_link;
-				}
-				elseif ($media->media_type == 2)
-				{
-					$incident_video[] = $media->media_link;
-				}
-				elseif ($media->media_type == 1)
-				{
-					$incident_photo[] = $media->media_link;
-				}
-			}
-
-			$this->template->content->incident_verified = $incident->incident_verified;
-
-			// Retrieve Comments (Additional Information)
-			$this->template->content->comments = "";
-			if (Kohana::config('settings.allow_comments'))
-			{
-				$this->template->content->comments = new View('reports_comments');
-				$incident_comments = array();
-				if ($id)
-				{
-					$incident_comments = Incident_Model::get_comments($id);
-				}
-				$this->template->content->comments->incident_comments = $incident_comments;
-			}
-		}
-
-		// Add Neighbors
-		$this->template->content->incident_neighbors = Incident_Model::get_neighbouring_incidents($id, TRUE, 0, 5);
-		
-		// News Source links
-		$this->template->content->incident_news = $incident_news;
-
-
-		// Video links
-		$this->template->content->incident_videos = $incident_video;
-
-		// Images
-		$this->template->content->incident_photos = $incident_photo;
-
-		// Create object of the video embed class
-		$video_embed = new VideoEmbed();
-		$this->template->content->videos_embed = $video_embed;
-
-		// Javascript Header
-		$this->themes->map_enabled = TRUE;
-		$this->themes->photoslider_enabled = TRUE;
-		$this->themes->videoslider_enabled = TRUE;
-		$this->themes->js = new View('reports_view_js');
-		$this->themes->js->incident_id = $incident->id;
-		$this->themes->js->default_map = Kohana::config('settings.default_map');
-		$this->themes->js->default_zoom = Kohana::config('settings.default_zoom');
-		
-		$this->themes->js->default_zoom = 16;
-    $this->themes->js->latitude = $incident->location->latitude;
-		$this->themes->js->longitude = $incident->location->longitude;
-		$this->themes->js->incident_zoom = 16;
-		$this->themes->js->incident_photos = $incident_photo;
-
-		// Initialize custom field array
-		$this->template->content->custom_forms = new View('reports_view_custom_forms');
-		$form_field_names = customforms::get_custom_form_fields($id, $incident->form_id, FALSE, "view");
-		$this->template->content->custom_forms->form_field_names = $form_field_names;
-
-
-		// If the Admin is Logged in - Allow for an edit link
-		$this->template->content->logged_in = $this->logged_in;
-
-		// Rebuild Header Block
-		$this->template->header->header_block = $this->themes->header_block();
-	}
-
-
-
 
 	/**
 	 * Report Thanks Page
@@ -1144,7 +907,7 @@ class Reports_Controller extends Main_Controller {
 	 */
 	private function _get_cities()
 	{
-		$cities = ORM::factory('city')->orderby('city', 'asc')->limit(10)->find_all();
+		$cities = ORM::factory('city')->orderby('city', 'asc')->find_all();
 		$city_select = array('' => Kohana::lang('ui_main.reports_select_city'));
 
 		foreach ($cities as $city)
@@ -1260,22 +1023,6 @@ class Reports_Controller extends Main_Controller {
 
 		$form_fields = customforms::switcheroo($incident_id,$form_id);
         echo json_encode(array("status"=>"success", "response"=>$form_fields));
-    }
-    
-
-    private function _get_media_location($id=1, $lat = 40, $lon = -70, $type =1,$page=0) {
-         $db = new Database();
-         //incident report time nearest in time to selected event
-         $q = "select m.*, i.*, l.*,
-          ((ACOS(SIN(".$lat." * PI() / 180) * SIN(l.`latitude` * PI() / 180) + COS(".$lat." * PI() / 180) * COS(l.`latitude` * PI() / 180) * COS((".$lon." - l.`longitude`) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS distance
-         from media m
-         join incident i on m.incident_id = i.id
-         join location l on m.location_id = l.id
-         where m.media_type=".$type." 
-         having distance < 0.125
-         order by i.incident_date desc, distance asc
-         limit ".$page.", 40";
-         return  $db->query($q);
     }
 
 }
