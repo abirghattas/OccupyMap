@@ -806,7 +806,14 @@ class Reports_Controller extends Main_Controller {
       foreach ($neighbors as $neighbor) {
         $nabs[] = $neighbor;
       }
-      $most_recent_incident = $nabs[0];
+      if (count($nabs) >0)
+      {
+        $most_recent_incident = $nabs[0];
+      } 
+      else 
+      {
+        $most_recent_incident = $an_incident;
+      }
       $incident = ORM::factory('incident')
         ->where('id',$most_recent_incident->id)
         ->find();
