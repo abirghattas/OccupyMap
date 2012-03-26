@@ -88,6 +88,7 @@ class Reports_Controller extends Main_Controller {
 		{
 			$this->template->content->category_title = "";
 		}
+    $this->template->content->category_title = Category_Lang_Model::category_title($category_id,$l);
 
 		// Collect report stats
 		$this->template->content->report_stats = new View('reports_stats');
@@ -118,6 +119,10 @@ class Reports_Controller extends Main_Controller {
 		$this->template->content->report_stats->total_reports = $total_reports;
 		$this->template->content->report_stats->avg_reports_per_day = $avg_reports_per_day;
 		$this->template->content->report_stats->percent_verified = $percent_verified;
+		$this->template->content->custom_forms_filter = new View('reports_submit_custom_forms');
+    $disp_custom_fields = customforms::get_custom_form_fields();		
+    $this->template->content->custom_forms_filter->disp_custom_fields = $disp_custom_fields;
+    
 		$this->template->content->services = Service_Model::get_array();
 
 		$this->template->header->header_block = $this->themes->header_block();
@@ -262,6 +267,7 @@ class Reports_Controller extends Main_Controller {
 			'incident_news' => array(),
 			'incident_video' => array(),
 			'incident_photo' => array(),
+			'incident_zoom' => '',
 			'person_first' => '',
 			'person_last' => '',
 			'person_email' => '',
@@ -334,8 +340,8 @@ class Reports_Controller extends Main_Controller {
 
 				// Action::report_add/report_submit - Added a New Report
 				//++ Do we need two events for this? Or will one suffice?
-				Event::run('ushahidi_action.report_add', $incident);
 				Event::run('ushahidi_action.report_submit', $post);
+				Event::run('ushahidi_action.report_add', $incident);
 
 				url::redirect('reports/thanks');
 			}
@@ -974,6 +980,128 @@ class Reports_Controller extends Main_Controller {
 		$this->template->content->custom_forms->form_field_names = $form_field_names;
 
 
+
+		// Setup and initialize form field names
+		$form = array
+		(
+			'incident_title' => '',
+			'incident_description' => '',
+			'incident_date' => '',
+			'incident_hour' => '',
+			'incident_minute' => '',
+			'incident_ampm' => '',
+			'latitude' => '',
+			'longitude' => '',
+			'geometry' => array(),
+			'location_name' => '',
+			'country_id' => '',
+			'country_name'=>'',
+			'incident_category' => array(),
+			'incident_news' => array(),
+			'incident_video' => array(),
+			'incident_photo' => array(),
+			'incident_zoom' => '',
+			'person_first' => '',
+			'person_last' => '',
+			'person_email' => '',
+			'form_id'	  => '',
+			'custom_field' => array()
+		);
+		
+		// Copy the form as errors, so the errors will be stored with keys corresponding to the form field names
+		$errors = $form;
+		$form_error = FALSE;
+
+		$form_saved = (FALSE);
+
+		// Initialize Default Values
+		$form['incident_date'] = date("m/d/Y",time());
+		$form['incident_hour'] = date('g');
+		$form['incident_minute'] = date('i');
+		$form['incident_ampm'] = date('a');
+		$form['country_id'] = Kohana::config('settings.default_country');
+		
+		// Initialize Default Value for Hidden Field Country Name, just incase Reverse Geo coding yields no result
+		$country_name = ORM::factory('country',$form['country_id']);
+		$form['country_name'] = $country_name->country;
+		
+		// Initialize custom field array
+		$form['custom_field'] = customforms::get_custom_form_fields($id,'',true);
+		
+		//GET custom forms
+		$forms = array();
+		foreach (customforms::get_custom_forms() as $custom_forms)
+		{
+			$forms[$custom_forms->id] = $custom_forms->form_title;
+		}
+		
+		$this->template->content->forms = $forms;
+
+		// Retrieve Country Cities
+		$default_country = Kohana::config('settings.default_country');
+		$this->template->content->cities = $this->_get_cities($default_country);
+		$this->template->content->multi_country = Kohana::config('settings.multi_country');
+
+		$this->template->content->id = $id;
+		$this->template->content->form = $form;
+		$this->template->content->errors = $errors;
+		$this->template->content->form_error = $form_error;
+
+		$categories = $this->get_categories($form['incident_category']);
+		$this->template->content->categories = $categories;
+		
+		// Pass timezone
+		$this->template->content->site_timezone = Kohana::config('settings.site_timezone');
+		
+		// Pass the submit report message
+		$this->template->content->site_submit_report_message = Kohana::config('settings.site_submit_report_message');
+
+		// Retrieve Custom Form Fields Structure
+		$this->template->content->custom_forms = new View('reports_submit_custom_forms');
+		$disp_custom_fields = customforms::get_custom_form_fields($id,$form['form_id'], FALSE);
+		$this->template->content->disp_custom_fields = $disp_custom_fields;
+		$this->template->content->stroke_width_array = $this->_stroke_width_array();
+		$this->template->content->custom_forms->disp_custom_fields = $disp_custom_fields;
+		$this->template->content->custom_forms->form = $form;
+
+		// Javascript Header
+		$this->themes->map_enabled = TRUE;
+		$this->themes->datepicker_enabled = TRUE;
+		$this->themes->treeview_enabled = TRUE;
+		$this->themes->colorpicker_enabled = TRUE;
+		
+		$this->themes->js = new View('reports_submit_edit_js');
+		$this->themes->js->edit_mode = FALSE;
+		$this->themes->js->incident_zoom = FALSE;
+		$this->themes->js->default_map = Kohana::config('settings.default_map');
+		$this->themes->js->default_zoom = Kohana::config('settings.default_zoom');
+		if (!$form['latitude'] OR !$form['latitude'])
+		{
+	    	if (is_array($this->session->get('city_local'))) {
+                $city = $this->session->get('city_local');
+            	$this->themes->js->latitude = $city['city_lat'];
+        		$this->themes->js->longitude = $city['city_lon'];
+            } else {
+        		$this->themes->js->latitude = Kohana::config('settings.default_lat');
+        		$this->themes->js->longitude = Kohana::config('settings.default_lon');
+            }
+		}
+		else
+		{
+			$this->themes->js->latitude = $form['latitude'];
+			$this->themes->js->longitude = $form['longitude'];
+		}
+		$this->themes->js->geometries = $form['geometry'];
+
+
+
+
+
+
+
+
+
+
 		// If the Admin is Logged in - Allow for an edit link
 		$this->template->content->logged_in = $this->logged_in;
 
@@ -1144,6 +1272,7 @@ class Reports_Controller extends Main_Controller {
 	 */
 	private function _get_cities()
 	{
+	  //we have 5000 cities so limit them - this menu isn't really used anymore
 		$cities = ORM::factory('city')->orderby('city', 'asc')->limit(10)->find_all();
 		$city_select = array('' => Kohana::lang('ui_main.reports_select_city'));
 
