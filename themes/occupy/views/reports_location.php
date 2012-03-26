@@ -75,7 +75,7 @@
 $vids = array();
 foreach ($videos as $v) {
   $embed_code = $videos_embed->embed($v->media_link,'', true);
-	if (strpos($embed_code,"<embed")) {
+	if (strpos($embed_code,"<embed") || (strpos($embed_code,"<iframe"))) {
 	  $vids[] = $v;
   }
 }
