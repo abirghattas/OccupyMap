@@ -73,8 +73,10 @@ class VideoEmbed
         		
         		//twitvid
         		case "twitvid":
+        		$size = ($tiny) ?'width="320" height="200"' : 'width="480" height="360"';
+		        
         		$return = '
-        		<iframe title="Twitvid video player" class="twitvid-player" type="text/html" width="480" height="360" src="http://www.twitvid.com/embed.php?guid='.$code.'&autoplay=0" frameborder="0"></iframe>
+        		<iframe title="Twitvid video player" class="twitvid-player" type="text/html" '.$size.'  src="http://www.twitvid.com/embed.php?guid='.$code.'&autoplay=0" frameborder="0"></iframe>
         		';
         		break;
         		
