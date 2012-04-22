@@ -194,8 +194,13 @@ if (isset($uri_segments))
 				   
 				 })
 				
+        $("#filter-menu-toggle").click(function(){
+          $("#the-filters").toggle(400);
+        })
         
-        
+        $("#layers-menu-toggle").click(function(){
+          $("#kml_switch").toggle(400);
+        })
       })
       </script>			
 			<!-- user actions -->
