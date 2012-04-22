@@ -45,7 +45,7 @@
 						</h4>
 					</div>
 					<?php } ?>
-					<h4 title="If you have a youtube video, just drop it in here and the form will auto-populate with the name and description of the video">Youtube Link (optional)</h4>
+					<h4 title="If you have a youtube video, just drop it in here and the form will auto-populate with the name and description of the video">Video Link - Youtube or Vimeo (optional)</h4>
 					<input type="text" name="check_youtube" class="text long "id="check_youtube" value="" />
 					<h4><?php echo Kohana::lang('ui_main.reports_title'); ?></h4>
 					<?php print form::input('incident_title', $form['incident_title'], ' class="text long"'); ?>

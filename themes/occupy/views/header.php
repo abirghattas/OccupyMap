@@ -177,8 +177,7 @@ if (isset($uri_segments))
          $("#check_youtube").change(function(){
 				   //do the youtube query, get json and prepopulate
           v_url = $("#check_youtube").val();
-          console.log(v_url.split("youtube.com"))
-          if (v_url.split("youtube.com").length >1) {
+          if ((v_url.split("youtube.com").length >1 )|| (v_url.split("vimeo.com").length >1)) {
 					   $.ajax({
 					     url:"http://map.occupy.net:9494/video/"+v_url,
 					     dataType:'json',
