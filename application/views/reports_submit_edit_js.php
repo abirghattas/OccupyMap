@@ -647,8 +647,7 @@
 						myPoint.transform(proj_4326, map.getProjectionObject());
 
 						// display the map centered on a latitude and longitude
-						map.setCenter(myPoint, <?php echo $default_zoom; ?>);
-						
+						map.setCenter(myPoint, 15);
 						// Update form values
 						$("#latitude").attr("value", data.message[0]);
 						$("#longitude").attr("value", data.message[1]);

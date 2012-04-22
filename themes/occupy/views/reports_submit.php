@@ -35,7 +35,7 @@
 			<div class="report_left">
 				<div class="report_row">
 					<?php if(count($forms) > 1){ ?>
-					<div class="row">
+					<div class="row" style="display:none">
 						<h4><span><?php echo Kohana::lang('ui_main.select_form_type');?></span>
 						<span class="sel-holder">
 							<?php print form::dropdown('form_id', $forms, $form['form_id'],
@@ -45,6 +45,8 @@
 						</h4>
 					</div>
 					<?php } ?>
+					<h4 title="If you have a youtube video, just drop it in here and the form will auto-populate with the name and description of the video">Youtube Link (optional)</h4>
+					<input type="text" name="check_youtube" class="text long "id="check_youtube" value="" />
 					<h4><?php echo Kohana::lang('ui_main.reports_title'); ?></h4>
 					<?php print form::input('incident_title', $form['incident_title'], ' class="text long"'); ?>
 				</div>
@@ -180,7 +182,7 @@
 							</ul>
 						</div>
 						<div style="clear:both;"></div>
-						<?php print form::input('location_find', '', ' title="'.Kohana::lang('ui_main.location_example').'" class="findtext"'); ?>
+						<?php print form::input('location_find', '', ' title="'.Kohana::lang('ui_main.location_example').'" class="findtext" autocomplete="off"'); ?>
 						<div style="float:left;margin:9px 0 0 5px;"><input type="button" name="button" id="button" value="<?php echo Kohana::lang('ui_main.find_location'); ?>" class="btn_find" /></div>
 						<div id="find_loading" class="report-find-loading"></div>
 						<div style="clear:both;" id="find_text"><?php echo Kohana::lang('ui_main.pinpoint_location'); ?>.</div>
@@ -189,7 +191,7 @@
 				<?php Event::run('ushahidi_action.report_form_location', $id); ?>
 				<div class="report_row">
 					<h4><?php echo Kohana::lang('ui_main.reports_location_name'); ?><br /><span class="example"><?php echo Kohana::lang('ui_main.detailed_location_example'); ?></span></h4>
-					<?php print form::input('location_name', $form['location_name'], ' class="text long"'); ?>
+					<?php print form::input('location_name', $form['location_name'], ' class="text long" autocomplete="off"'); ?>
 				</div>
 
 				<!-- News Fields -->
@@ -238,32 +240,27 @@
 						$this_startid = "video_id";
 						$this_field_type = "text";
 
-						if (empty($form[$this_field]))
-						{
-							$i = 1;
-							print "<div class=\"report_row\">";
-							print form::input($this_field . '[]', '', ' class="text long2"');
-							print "<a href=\"#\" class=\"add\" onClick=\"addFormField('$this_div','$this_field','$this_startid','$this_field_type'); return false;\">add</a>";
-							print "</div>";
-						}
-						else
-						{
-							$i = 0;
-							foreach ($form[$this_field] as $value) {
-								print "<div class=\"report_row\" id=\"$i\">\n";
+						if (empty($form[$this_field])):?>
+						<?php 	$i = 1;?>
+						  <div class="report_row">
+							<?=form::input($this_field . '[]', '', ' class="text long2 video"');?>
+							<a href="javascript:void(0)" class="add" onClick="addFormField('<?=$this_div?>','<?=$this_field?>','<?=$this_startid?>','<?=$this_field_type?>'); return false;">add</a>
+							</div>
+						<?php else: ?>
+						<?php	$i = 0;?>
+							<?php foreach ($form[$this_field] as $value): ?>
+								  <div class="report_row" id="<?=$i?>">
 
-								print form::input($this_field . '[]', $value, ' class="text long2"');
-								print "<a href=\"#\" class=\"add\" onClick=\"addFormField('$this_div','$this_field','$this_startid','$this_field_type'); return false;\">add</a>";
-								if ($i != 0)
-								{
-									print "<a href=\"#\" class=\"rem\"	onClick='removeFormField(\"#" . $this_field . "_" . $i . "\"); return false;'>remove</a>";
-								}
-								print "</div>\n";
-								$i++;
-							}
-						}
-						print "<input type=\"hidden\" name=\"$this_startid\" value=\"$i\" id=\"$this_startid\">";
-					?>
+								<?=form::input($this_field . '[]', $value, ' class="text long2"');?>
+							<a href="javascript:void(0)" class="add" onClick="addFormField('<?=$this_div?>','<?=$this_field?>','<?=$this_startid?>','<?=$this_field_type?>'); return false;">add</a>
+								<?php if ($i != 0):?>
+								  <a href="#" class="rem"	onClick='removeFormField(\"#<?=$this_field ?>"_"<?=$i?>"); return false;'>remove</a>
+								<?php endif?>
+								</div>
+								<?php $i++;?>
+							<?php endforeach?>
+						<?php endif?>
+						<input type="hidden" name="<?=$this_startid?>" value="<?=$i?>" id="<?=$this_startid?>">
 				</div>
 
 				<!-- Photo Fields -->

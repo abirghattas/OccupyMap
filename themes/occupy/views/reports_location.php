@@ -364,7 +364,7 @@ foreach ($videos as $v) {
     	      }
     	    })
     	    vids = vids+'</ol>';
-    	    $("#report-video").html(vids);
+    	    //$("#report-video").html(vids);
     	    $("#report-images").html(pics);
     	    $("#incident-description").html(desc + incident.incidentdescription + news +links + "</div>" + 
     	    "<div class=\"credibility\"><h5>Full Report</h5><a href=\"/reports/view/"+incident.incidentid+"\">"+incident.incidenttitle+"</a></div>");

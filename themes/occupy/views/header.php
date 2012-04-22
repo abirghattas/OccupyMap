@@ -118,6 +118,18 @@ if (isset($uri_segments))
                // return console.log(site_url + data.url);
 
               };
+              
+              var location_select = function(term, data, type){
+                $("#location_find").val(term)
+                $("#location_name").val(term);
+                geoCode();
+                //stupid wait for asynchronous geocode return
+                //can we catch the map change in this scope?
+                window.setTimeout(function(){$("#location_name").val(term);
+                $("#soulmate").fadeOut('slow');
+                },1500);
+              }
+
               $('#search-input').soulmate({
                 url: 'http://map.occupy.net:5656/search',
                 types: ['incident', 'location','city','tag'],
@@ -126,9 +138,64 @@ if (isset($uri_segments))
                 minQueryLength: 3,
                 maxResults: 5
               });
-            }).call(this);
-        $('#search-input').blur()
-        $('#search-input').focus(function(){$(this).val('')})
+              
+              $('#location_find').soulmate({
+                url: 'http://map.occupy.net:5656/search',
+                types: ['location'],
+                renderCallback: render,
+                selectCallback: location_select,
+                minQueryLength: 3,
+                maxResults: 10
+              });
+              
+              
+        $('#search-input').blur();
+        $('#search-input').focus(function(){
+          var pos = $("#search-input").offset();
+          
+          $("#soulmate").css("position","absolute");
+          $("#soulmate").css("top",pos.top +"px")
+          $("#soulmate").css("right","120px")
+          $(this).val('')});
+        $('#location_find').blur();
+        $('#location_find').focus(function(){
+          var pos = $("#location_find").offset();
+          $("#soulmate").css("position","absolute");
+          $("#soulmate").css("top",pos.top +"px")
+          $("#soulmate").css("right","250px")
+
+         // $("#soulmate").css("left",pos.left +"px")
+
+          $(this).val('')
+          
+        });
+        
+        }).call(this);
+        
+        
+        //youtube prepopulate on submit forms
+         $("#check_youtube").change(function(){
+				   //do the youtube query, get json and prepopulate
+          v_url = $("#check_youtube").val();
+          console.log(v_url.split("youtube.com"))
+          if (v_url.split("youtube.com").length >1) {
+					   $.ajax({
+					     url:"http://map.occupy.net:9494/video/"+v_url,
+					     dataType:'json',
+					     success:function(data) {
+					       console.log(data);
+					       $("#incident_title").val(data.title);
+					       $("#incident_description").val(data.url +" \n \n"+ data.description);
+					       $("input.video").first().val(v_url);
+                //set the date also.  would be great to prompt a location
+					     }
+					   })
+          }
+				   
+				 })
+				
+        
+        
       })
       </script>			
 			<!-- user actions -->

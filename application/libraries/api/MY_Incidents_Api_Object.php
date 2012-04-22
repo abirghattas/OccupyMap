@@ -404,7 +404,7 @@ class Incidents_Api_Object extends Api_Object_Core {
       //generate video embed codes...
 			if ($media_item->mediatype=="2"){
 				$media_items[$media_item->incident_id][$i]['medialink'] =  
-			  VideoEmbed::embed($media_item->medialink,null,true);
+			  VideoEmbed::embed($media_item->medialink,null,false);
 			} else {
   			$media_items[$media_item->incident_id][$i]['medialink'] = $media_item->medialink;
 			}
