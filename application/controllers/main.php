@@ -459,6 +459,31 @@ class Main_Controller extends Template_Controller {
 		
 		
 
+    //get all locations, count incidents within 30 days, rank
+    
+    $query = $db->query('
+      select location_name, location.id, incident_date, count(location.id) as num_incidents from location 
+      join incident on incident.location_id = location.id
+      where location_name != "Unknown" and incident_date  BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() group by location_name order by num_incidents desc
+    ');
+    $active_locations = array();
+    foreach ($query as $data ) {
+      $active_locations[]= array("location_name" => $data->location_name, "id"=>$data->id, "num_incidents"=>$data->num_incidents );
+    }
+    //get all incidents, cluster by date
+    $query = $db->query('select incident.*, DATE(incident_date) as day, incident_date, count(id) as num_incidents from incident where incident_date  group by day order by num_incidents desc limit 10');
+    $key_dates = array();
+    foreach ($query as $data) {
+      $key_dates[] = array("date"=>date("F j, Y",strtotime($data->day)), "timestamp"=>strtotime($data->day), "num_incidents"=>$data->num_incidents);
+    }
+    $sort = array();
+    foreach ($key_dates as $d) {
+      $sort[$d["timestamp"]] = $d;
+    }
+    ksort($sort);
+    $key_dates = $sort;
+    $this->template->content->key_dates = $key_dates;
+    $this->template->content->active_locations = $active_locations;
 		// Javascript Header
 		$this->themes->map_enabled = TRUE;
 		$this->themes->main_page = TRUE;

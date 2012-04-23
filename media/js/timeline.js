@@ -93,6 +93,7 @@
 						}
 					};
 				}
+				console.log(this.graphData);
 				plot = $.plot($("#"+this.elementId), [this.graphData],
 					$.extend(true, {}, this.graphOptions, customOptions));
 			}

@@ -1,5 +1,5 @@
 <!-- map -->
-<div class="map" id="map"></div>
+<div class="map" id="map" style="height:600px"></div>
 <div style="clear:both;"></div>
 <div id="mapStatus">
 	<div id="mapScale" style="border-right: solid 1px #999"></div>

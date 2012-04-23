@@ -36,7 +36,7 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 
 		<!-- right column -->
 		<div id="report-map-filter-box" class="clearingfix">
-	    <a class="btn toggle" id="filter-menu-toggle" class="" href="#the-filters">Filter Reports By <span class="btn-icon ic-right">&raquo;</span></a>
+	    <a class="btn toggle" id="filter-menu-toggle" class="" href="javascript:void(0)">Filter Reports By <span class="btn-icon ic-right">&raquo;</span></a>
 	    
 	    <!-- filters box -->
 	    <div id="the-filters" class="map-menu-box">
@@ -46,7 +46,7 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
     			<h3><?php echo Kohana::lang('ui_main.category');?></h3>
 			
     			<ul id="category_switch" class="category-filters">
-    				<li><a class="active" id="cat_0" href="#"><span class="swatch" style="background-color:<?php echo "#".$default_map_all;?>"></span><span class="category-title"><?php echo Kohana::lang('ui_main.all_categories');?></span></a></li>
+    				<li><a class="active" id="cat_0" href="javascript:void(0)"><span class="swatch" style="background-color:<?php echo "#".$default_map_all;?>"></span><span class="category-title"><?php echo Kohana::lang('ui_main.all_categories');?></span></a></li>
     				<?php
     					foreach ($categories as $category => $category_info)
     					{
@@ -145,30 +145,60 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 			?>
 			
 			
-			<?php
-			if ($shares)
-			{
-				?>
-				<div id="other-deployments-box">
-				  <a class="btn toggle" id="other-deployments-menu-toggle" class="" href="#sharing_switch"><?php echo Kohana::lang('ui_main.other_ushahidi_instances');?> <span class="btn-icon ic-right">&raquo;</span></a>
-  				<!-- Layers (Other Ushahidi Layers) -->
-  				<ul id="sharing_switch" class="category-filters map-menu-box">
-  					<?php
-  					foreach ($shares as $share => $share_info)
-  					{
-  						$sharing_name = $share_info[0];
-  						$sharing_color = $share_info[1];
-  						echo '<li><a href="#" id="share_'. $share .'"><span class="swatch" style="background-color:#'.$sharing_color.'"></span>
-  						<span class="category-title">'.$sharing_name.'</span></a></li>';
-  					}
-  					?>
-  				</ul>
-  			</div>
-  			<!-- /Layers -->
-				<?php
-			}
-			?>
-			
+        <div id="headline-box" style="position:relative; right:-800px">
+             <a class="btn toggle" id="headline-switch"  href="javascript:void(0)">Headlines <span class="btn-icon ic-right">&raquo;</span></a>
+               <div class="headline-box" style="padding:10px">
+                 <h5>Active Places</h5>
+                 <ul class="category-filters">
+                   <?php foreach($active_locations as $location):?>
+                     <li><a href="/reports/view_location/<?=$location["id"]?>"><?=$location["location_name"]?></a> (<?=$location["num_incidents"]?>)</li>
+                   <?php endforeach?>
+                  
+                 </ul>
+
+                 <h5>Important Dates</h5>
+                 <ul class="category-filters">
+                     <?php foreach ($key_dates as $day): ?>
+                        <li><a class="datepick" rel="<?=$day["timestamp"]?>" href="javascript:void(0)"?><?=$day["date"]?></a>(<?=$day["num_incidents"]?>)</li>
+                      <?php endforeach ?>
+                 </ul>
+                 
+              </div>
+               
+      				
+        </div>
+        <script type="text/javascript">
+          $("a.datepick").click(function(){
+            var day = parseInt($(this).attr("rel")) - (86400);
+            var nextDay = parseInt(day) +(86400*2);
+            var stop=false;
+            $("#startDate").find("option").each(function(i,e){
+              var v = ($(e).attr("value"));
+              if (v>day && stop==false){
+                stop = true;
+                $("#startDate").val(v);
+                $(e).select()
+              }
+            })
+            stop=false;
+            $("#endDate").find("option").each(function(i,e){
+              var v = ($(e).attr("value"));
+              if (v>nextDay && stop==false){
+                $("#endDate").val(v);
+                $(e).select();
+                stop = true;
+
+              }
+            })
+      
+            //set start date to day value
+      
+            //set end date to day val + 1 day
+            //trigger change handlers for start day and end day on map
+            $("#startDate").trigger('change');
+            $("#endDate").trigger('change');
+          })
+        </script>
 			
 			<!-- additional content -->
 			<?php
