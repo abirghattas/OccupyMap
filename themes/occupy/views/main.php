@@ -144,62 +144,6 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 			}
 			?>
 			
-			
-        <div id="headline-box" style="position:relative; right:-800px">
-             <a class="btn toggle" id="headline-switch"  href="javascript:void(0)">Headlines <span class="btn-icon ic-right">&raquo;</span></a>
-               <div class="headline-box" style="padding:10px">
-                 <h5>Active Places</h5>
-                 <ul class="category-filters">
-                   <?php foreach($active_locations as $location):?>
-                     <li><a href="/reports/view_location/<?=$location["id"]?>"><?=$location["location_name"]?></a> (<?=$location["num_incidents"]?>)</li>
-                   <?php endforeach?>
-                  
-                 </ul>
-
-                 <h5>Important Dates</h5>
-                 <ul class="category-filters">
-                     <?php foreach ($key_dates as $day): ?>
-                        <li><a class="datepick" rel="<?=$day["timestamp"]?>" href="javascript:void(0)"?><?=$day["date"]?></a>(<?=$day["num_incidents"]?>)</li>
-                      <?php endforeach ?>
-                 </ul>
-                 
-              </div>
-               
-      				
-        </div>
-        <script type="text/javascript">
-          $("a.datepick").click(function(){
-            var day = parseInt($(this).attr("rel")) - (86400);
-            var nextDay = parseInt(day) +(86400*2);
-            var stop=false;
-            $("#startDate").find("option").each(function(i,e){
-              var v = ($(e).attr("value"));
-              if (v>day && stop==false){
-                stop = true;
-                $("#startDate").val(v);
-                $(e).select()
-              }
-            })
-            stop=false;
-            $("#endDate").find("option").each(function(i,e){
-              var v = ($(e).attr("value"));
-              if (v>nextDay && stop==false){
-                $("#endDate").val(v);
-                $(e).select();
-                stop = true;
-
-              }
-            })
-      
-            //set start date to day value
-      
-            //set end date to day val + 1 day
-            //trigger change handlers for start day and end day on map
-            $("#startDate").trigger('change');
-            $("#endDate").trigger('change');
-          })
-        </script>
-			
 			<!-- additional content -->
 			<?php
 			if (Kohana::config('settings.allow_reports'))
@@ -275,7 +219,7 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 <!-- / main body -->
 
 <!-- content -->
-<div class="content-container">
+<div class="content-container" style='display:none'>
 
 	<!-- content blocks -->
 	<div class="content-blocks clearingfix">
