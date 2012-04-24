@@ -464,14 +464,14 @@ class Main_Controller extends Template_Controller {
     $query = $db->query('
       select location_name, location.id, incident_date, count(location.id) as num_incidents from location 
       join incident on incident.location_id = location.id
-      where location_name != "Unknown" and incident_date  BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() group by location_name order by num_incidents desc
+      where location_name != "Unknown" and incident_date  BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() group by location_name order by num_incidents desc limit 8 
     ');
     $active_locations = array();
     foreach ($query as $data ) {
       $active_locations[]= array("location_name" => $data->location_name, "id"=>$data->id, "num_incidents"=>$data->num_incidents );
     }
     //get all incidents, cluster by date
-    $query = $db->query('select incident.*, DATE(incident_date) as day, incident_date, count(id) as num_incidents from incident where incident_date  group by day order by num_incidents desc limit 10');
+    $query = $db->query('select incident.*, DATE(incident_date) as day, incident_date, count(id) as num_incidents from incident where incident_date  group by day order by num_incidents desc limit 8');
     $key_dates = array();
     foreach ($query as $data) {
       $key_dates[] = array("date"=>date("F j, Y",strtotime($data->day)), "timestamp"=>strtotime($data->day), "num_incidents"=>$data->num_incidents);

@@ -23,8 +23,11 @@
   </div>
 </div>
 <script type="text/javascript">
+//timeline has to be visible on page load or else errorz
+$(document).ready(function(){
+  $("#timeline-container").fadeOut('slow');
   $("#show-timeline").click(function(){
     $("#timeline-container").toggle(400);
-    $("#show-timeline").find(".label").toggle(400)
-  })
-</script>
+    $("#show-timeline").find(".label").toggle(400);
+  })  
+})</script>
