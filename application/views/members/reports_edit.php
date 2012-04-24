@@ -412,9 +412,9 @@
 							</div>
 						</div>
 						<!-- f-col-bottom -->
-						<div class="f-col-bottom-container">
+						<div class="f-col-bottom-container" style="display:none">
 							<div class="f-col-bottom">
-								<div class="row">
+								<div class="row" >
 									<h4><?php echo Kohana::lang('ui_main.personal_information');?></span></h4>
 									<label>
 										<span><?php echo Kohana::lang('ui_main.first_name');?></span>

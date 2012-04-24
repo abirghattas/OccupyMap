@@ -87,7 +87,7 @@ echo html::script(url::file_loc('js').'media/js/openid/openid-jquery-en', true);
 				</table>
 			</form>
 		</div>
-		
+		<!--
 		<h2><a href="javascript:toggle('signin_openid');"><?php echo Kohana::lang('ui_main.login_signin_openid'); ?></a></h2>
 		<div id="signin_openid" class="signin_select ui-corner-all">
 			<form method="post" id="openid_form">
@@ -107,9 +107,11 @@ echo html::script(url::file_loc('js').'media/js/openid/openid-jquery-en', true);
 				</noscript>
 			</form>
 		</div>
-
-		<?php echo Kohana::lang('ui_main.login_signup_text'); ?>, <a href="javascript:toggle('signin_new');"><?php echo Kohana::lang('ui_main.login_signup_click'); ?></a>
-		<div id="signin_new" class="signin_select ui-corner-all" style="margin-top:10px;">
+  -->
+  <br/><br/>
+	 <h2>Sign Up</h2>
+		</a>
+		<div id="signin_new" class="signin_select ui-corner-all" style="margin-top:10px; display:block">
 			<form method="post" id="usernew_form">
 				<input type="hidden" name="action" value="new">
 				<table width="100%" border="0" cellspacing="3" cellpadding="4" background="" id="ushahidi_loginbox">

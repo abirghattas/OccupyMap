@@ -470,6 +470,9 @@ class Reports_Controller extends Members_Controller {
 
 				// STEP 2: SAVE INCIDENT
 				$incident = new Incident_Model();
+        //kludge: auto approve reports for members :/
+        //fill in their username for report submitter
+				$incident->incident_active = 1;
 				reports::save_report($post, $incident, $location->id);
 
 				// STEP 3: SAVE CATEGORIES
