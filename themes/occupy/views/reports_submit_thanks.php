@@ -55,6 +55,10 @@
 				  <div class="bubble">
 				    <h2>Comments? Questions?</h2>
 				    <h4><a href="mailto:maps@nycga.net">Email</a> your feedback or tweet  <a href="http://www.twitter.com/occupy_map">@occupy_map</a></h4>
+				    
+				    <h2>Want to Get Invovled?</h2>
+				    <h4>OccupyMap is built and run by volunteers.  We can always use more content moderators, reporters, and web developers. Contact us if you would like to get involved.</h4>
+				    
 				  </div>
           <div class="bubble">
             <h2><a href="/">Back to the Map</a></h2>
