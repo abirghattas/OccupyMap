@@ -14,6 +14,15 @@ $(function(){
       $(this).find(".btn-icon").removeClass("ic-down");
     }
   );
+  $(document).ready(function(){
+     $("#activity-menu-box").css("margin-right",(( -1 * $("#main").width())+240)+"px");
+     
+    $(window).on('resize',function(){
+      console.log($('#main').width());
+      $("#activity-menu-box").css("margin-right",(( -1 * $("#main").width())+240)+"px");
+    })
+    
+  })
   
 });
 
@@ -145,17 +154,17 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 			?>
 			
 			
-        <div id="headline-box" style="position:relative; left:800px;margin-top:20px;">
-             <a class="btn toggle" id="headline-switch"  href="javascript:void(0)">Headlines <span class="btn-icon ic-right">&raquo;</span></a>
-               <div class="headline-box" style="padding:10px">
-                 <h5>Active Places</h5>
+        <div id="activity-menu-box" style="position:relative; float:right; margin-right:-1100px;margin-top:20px;">
+             <a class="btn toggle" id="activity-menu-toggle"  href="javascript:void(0)">Activity <span class="btn-icon ic-right">&raquo;</span></a>
+               <div class="map-menu-box" id="activity-menu"  style="padding:10px">
+                 <h5>Places</h5>
                  <ul class="category-filters">
                    <?php foreach($active_locations as $location):?>
                      <li><a href="/reports/view_location/<?=$location["id"]?>"><?=$location["location_name"]?></a> (<?=$location["num_incidents"]?>)</li>
                    <?php endforeach?>
                   
                  </ul>
-                 <h5>Important Dates</h5>
+                 <h5>Dates</h5>
                  <ul class="category-filters">
                      <?php foreach ($key_dates as $day): ?>
                         <li><a class="datepick" rel="<?=$day["timestamp"]?>" href="javascript:void(0)"?><?=$day["date"]?></a>(<?=$day["num_incidents"]?>)</li>
@@ -176,7 +185,6 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
               if (v>day && stop==false){
                 stop = true;
                 $("#startDate").trigger('click');
-
                 $("#startDate").val(v);
                 $(e).select()
               }

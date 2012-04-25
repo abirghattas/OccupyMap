@@ -200,6 +200,10 @@ if (isset($uri_segments))
         $("#layers-menu-toggle").click(function(){
           $("#kml_switch").toggle(400);
         })
+        
+        $("#activity-menu-toggle").click(function(){
+          $("#activity-menu").toggle(400)
+        })
       })
       </script>			
 			<!-- user actions -->
