@@ -93,11 +93,8 @@
 						}
 					};
 				}
-/*				$(this.graphData.data).each(function(i,e){
-				  console.log(e);
-				})*/
-//				plot = $.plot($("#"+this.elementId), [this.graphData],
-	//				$.extend(true, {}, this.graphOptions, customOptions));
+				plot = $.plot($("#"+this.elementId), [this.graphData],
+					$.extend(true, {}, this.graphOptions, customOptions));
 			}
 			else
 			{

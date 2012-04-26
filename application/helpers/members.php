@@ -35,7 +35,7 @@ class members_Core {
 
         $menu .= ($this_sub_page == "view") ? Kohana::lang('ui_main.view_reports') : "<a href=\"".url::base()."members/reports\">".Kohana::lang('ui_main.view_reports')."</a>";
 
-        $menu .= ($this_sub_page == "edit") ? Kohana::lang('ui_main.create_report') : "<a href=\"".url::base()."members/reports/edit\">".Kohana::lang('ui_main.create_report')."</a>";
+        $menu .= ($this_sub_page == "edit") ? Kohana::lang('ui_main.create_report') : "<a href=\"".url::base()."reports/submit/\">".Kohana::lang('ui_main.create_report')."</a>";
 
         echo $menu;
         
