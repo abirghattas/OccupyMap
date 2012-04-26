@@ -54,16 +54,11 @@
 					<h4><?php echo Kohana::lang('ui_main.reports_description'); ?></h4>
 					<?php print form::textarea('incident_description', $form['incident_description'], ' rows="10" class="textarea long" ') ?>
 				</div>
+				
+	
 				<div class="report_row" id="datetime_default">
-					<h4>
-						<a href="javascript:void(0)" id="date_toggle" class="show-more"><?php echo Kohana::lang('ui_main.modify_date'); ?></a>
-						<?php echo Kohana::lang('ui_main.date_time'); ?>: 
-						<?php echo Kohana::lang('ui_main.today_at')." "."<span id='current_time'>".$form['incident_hour']
-							.":".$form['incident_minute']." ".$form['incident_ampm']."</span>"; ?>
-						<?php if($site_timezone != NULL): ?>
-							<small>(<?php echo $site_timezone; ?>)</small>
-						<?php endif; ?>
-					</h4>
+      				<h1>When Did it Happen?</h1>
+					
 				</div>
 				<div class="report_row hide" id="datetime_edit">
 					<div class="date-box">
@@ -98,15 +93,18 @@
 							print form::dropdown('incident_ampm',$ampm_array,$form['incident_ampm']);
 						?>
 						<?php if ($site_timezone != NULL): ?>
-							<small>(<?php echo $site_timezone; ?>)</small>
+							<small>(all times are USA/Eastern)</small>
 						<?php endif; ?>
 					</div>
 					<div style="clear:both; display:block;" id="incident_date_time"></div>
 				</div>
 				<div class="report_row">
-					<h4><?php echo Kohana::lang('ui_main.reports_categories'); ?></h4>
 					<div class="report_category" id="categories">
+					  <h1>What was it?</h1>
+  					<h4><?php echo Kohana::lang('ui_main.reports_categories'); ?></h4>
+
 					<?php
+					$form['incident_category'] = array(16);
 						$selected_categories = (!empty($form['incident_category']) AND is_array($form['incident_category']))
 							? $selected_categories = $form['incident_category']
 							:array();
@@ -124,6 +122,8 @@
 				?>
 
 				<?php echo $custom_forms ?>
+
+        <?php if ($this->logged_in !=1):?>
 
 				<div class="report_optional">
 					<h3><?php echo Kohana::lang('ui_main.reports_optional'); ?></h3>
@@ -144,6 +144,8 @@
 					Event::run('ushahidi_action.report_form_optional');
 					?>
 				</div>
+		
+		    <?php endif;?>
 			</div>
 			<div class="report_right">
 				<?php if ( ! $multi_country AND count($cities) > 1){ ?>
@@ -196,7 +198,7 @@
 
 				<!-- News Fields -->
 				<div id="divNews" class="report_row">
-					<h4><?php echo Kohana::lang('ui_main.reports_news'); ?></h4>
+					<h4><?php echo Kohana::lang('ui_main.reports_news'); ?> (optional)</h4>
 					<?php
 						$this_div = "divNews";
 						$this_field = "incident_news";
@@ -233,7 +235,7 @@
 
 				<!-- Video Fields -->
 				<div id="divVideo" class="report_row">
-					<h4><?php echo Kohana::lang('ui_main.reports_video'); ?></h4>
+					<h4><?php echo Kohana::lang('ui_main.reports_video'); ?> (optional)</h4>
 					<?php
 						$this_div = "divVideo";
 						$this_field = "incident_video";
@@ -265,7 +267,7 @@
 
 				<!-- Photo Fields -->
 				<div id="divPhoto" class="report_row">
-					<h4><?php echo Kohana::lang('ui_main.reports_photos'); ?></h4>
+					<h4><?php echo Kohana::lang('ui_main.reports_photos'); ?> (optional)</h4>
 					<?php
 						$this_div = "divPhoto";
 						$this_field = "incident_photo";

@@ -88,7 +88,6 @@ class Main_Controller extends Template_Controller {
 		$this->template->header->submit_btn = $this->themes->submit_btn();
 		$this->template->header->languages = $this->themes->languages();
 		$this->template->header->search = $this->themes->search();
-
 		// Set Table Prefix
 		$this->table_prefix = Kohana::config('database.default.table_prefix');
 
@@ -190,6 +189,8 @@ class Main_Controller extends Template_Controller {
     {
     $this->template->header->this_page = 'home';
     $this->template->content = new View('main');
+		$this->template->content->submit_btn = $this->themes->submit_btn();
+    
 		// Cacheable Main Controller
 		$this->is_cachable = TRUE;
 

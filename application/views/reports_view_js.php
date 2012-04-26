@@ -34,7 +34,7 @@
 			var proj_900913 = new OpenLayers.Projection('EPSG:900913');
 			var options = {
 				units: "dd",
-				numZoomLevels: 18,
+				numZoomLevels: 20,
 				controls:[],
 				projection: proj_900913,
 				'displayProjection': proj_4326

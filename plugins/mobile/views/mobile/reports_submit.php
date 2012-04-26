@@ -1,5 +1,5 @@
 <div class="report_submit">
-	<h2 class="main_title">Submit A Report</h2>
+	<h2 class="main_title">Add a Story</h2>
 	<?php print form::open(NULL, array('enctype' => 'multipart/form-data', 'id' => 'reportForm', 'name' => 'reportForm')); ?>
 	<input type="hidden" name="latitude" id="latitude" value="<?php echo $form['latitude']; ?>">
 	<input type="hidden" name="longitude" id="longitude" value="<?php echo $form['longitude']; ?>">

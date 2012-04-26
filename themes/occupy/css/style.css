@@ -2501,6 +2501,14 @@ div#middle { background:transparent; }
   margin:0 auto;
 }
 
+#top-bar h1 {
+  display:inline;
+  color:#fc0;
+  font-family:arial, helvetica, sans-serif;
+  font-size:32px
+  ;
+}
+
 div#miniTitle {
 	float:left;
 	position:relative;
@@ -2648,6 +2656,24 @@ div#right { position:absolute; z-index:1000; }
     -moz-box-shadow:0px 1px 1.5px #424041; -webkit-box-shadow:0px 1px 1.5px #424041; box-shadow:0px 1px 1.5px #424041;
     filter: progid:DXImageTransform.Microsoft.Shadow(strength=1.5, direction=180, color='#424041');
     -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(strength=1.5, Direction=180, Color='#424041')";
+}
+
+#activity-menu-toggle {
+  width:120px;
+}
+
+#activity-menu-box {
+  float:right;
+  margin-left:-360px;
+  margin-right:240px;
+  margin-top:20px;
+  position:relative;
+  z-index:2000;
+}
+
+#activity-menu-box .submit-incident {
+  left:40px;
+  margin-top:-20px;
 }
 
 #the-filters { 
@@ -2862,6 +2888,7 @@ span.btn-icon { display:block; position:absolute; height:16px; width:16px; overf
       padding: 5px 12px 6px 12px;
       text-decoration: none; 
       display:block;
+      clear:both;
     }
       #soulmate .soulmate-suggestion.focus {
         color: white;

@@ -28,7 +28,7 @@
 			// Create the default options
 			mapOptions = {
 				units: "mi",
-				numZoomLevels: 18,
+				numZoomLevels: 20,
 				theme: false,
 				controls:[],
 				projection: proj_900913,

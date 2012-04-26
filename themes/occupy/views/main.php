@@ -43,6 +43,76 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 		</div>
 	<?php } ?>
 
+
+		
+      <div id="activity-menu-box" style="position:relative; float:right; margin-top:20px;margin-left:-240px">
+        <!-- submit incident -->
+    		<div class="btns">
+      		<?php echo $submit_btn; ?>
+    		</div>
+    		
+    		
+    		<!-- / submit incident -->
+    		
+           <a class="btn toggle" id="activity-menu-toggle"  href="javascript:void(0)">Activity <span class="btn-icon ic-right">&raquo;</span></a>
+             <div class="map-menu-box" id="activity-menu"  style="padding:10px">
+               <h5>Places</h5>
+               <ul class="category-filters">
+                 <?php foreach($active_locations as $location):?>
+                   <li><a href="/reports/view_location/<?=$location["id"]?>"><?=$location["location_name"]?></a> (<?=$location["num_incidents"]?>)</li>
+                 <?php endforeach?>
+                
+               </ul>
+               <h5>Dates</h5>
+               <ul class="category-filters">
+                   <?php foreach ($key_dates as $day): ?>
+                      <li><a class="datepick" rel="<?=$day["timestamp"]?>" href="javascript:void(0)"?><?=$day["date"]?></a>(<?=$day["num_incidents"]?>)</li>
+                    <?php endforeach ?>
+               </ul>
+            </div>
+             
+    				
+      </div>
+      <script type="text/javascript">
+      $(document).ready(function(){
+        $("a.datepick").click(function(){
+          var day = parseInt($(this).attr("rel")) - (86400);
+          var nextDay = parseInt(day) +(86400*2);
+          var stop=false;
+          $("#startDate").find("option").each(function(i,e){
+            var v = ($(e).attr("value"));
+            if (v>day && stop==false){
+              stop = true;
+              $("#startDate").trigger('click');
+              $("#startDate").val(v);
+              $(e).select()
+            }
+          })
+          stop=false;
+          $("#endDate").find("option").each(function(i,e){
+            var v = ($(e).attr("value"));
+            if (v>nextDay && stop==false){
+              $("#endDate").trigger('click');
+
+              $("#endDate").val(v);
+              $(e).select();
+              stop = true;
+
+            }
+          })
+    
+          //set start date to day value
+    
+          //set end date to day val + 1 day
+          //trigger change handlers for start day and end day on map
+          $("#startDate").trigger('change');
+          $("#endDate").trigger('change');
+        })
+      })
+
+      </script>
+
+
 		<!-- right column -->
 		<div id="report-map-filter-box" class="clearingfix">
 	    <a class="btn toggle" id="filter-menu-toggle" class="" href="javascript:void(0)">Filter Reports By <span class="btn-icon ic-right">&raquo;</span></a>
@@ -153,65 +223,6 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 			}
 			?>
 			
-			
-        <div id="activity-menu-box" style="position:relative; float:right; margin-right:-1100px;margin-top:20px;">
-             <a class="btn toggle" id="activity-menu-toggle"  href="javascript:void(0)">Activity <span class="btn-icon ic-right">&raquo;</span></a>
-               <div class="map-menu-box" id="activity-menu"  style="padding:10px">
-                 <h5>Places</h5>
-                 <ul class="category-filters">
-                   <?php foreach($active_locations as $location):?>
-                     <li><a href="/reports/view_location/<?=$location["id"]?>"><?=$location["location_name"]?></a> (<?=$location["num_incidents"]?>)</li>
-                   <?php endforeach?>
-                  
-                 </ul>
-                 <h5>Dates</h5>
-                 <ul class="category-filters">
-                     <?php foreach ($key_dates as $day): ?>
-                        <li><a class="datepick" rel="<?=$day["timestamp"]?>" href="javascript:void(0)"?><?=$day["date"]?></a>(<?=$day["num_incidents"]?>)</li>
-                      <?php endforeach ?>
-                 </ul>
-              </div>
-               
-      				
-        </div>
-        <script type="text/javascript">
-        $(document).ready(function(){
-          $("a.datepick").click(function(){
-            var day = parseInt($(this).attr("rel")) - (86400);
-            var nextDay = parseInt(day) +(86400*2);
-            var stop=false;
-            $("#startDate").find("option").each(function(i,e){
-              var v = ($(e).attr("value"));
-              if (v>day && stop==false){
-                stop = true;
-                $("#startDate").trigger('click');
-                $("#startDate").val(v);
-                $(e).select()
-              }
-            })
-            stop=false;
-            $("#endDate").find("option").each(function(i,e){
-              var v = ($(e).attr("value"));
-              if (v>nextDay && stop==false){
-                $("#endDate").trigger('click');
-
-                $("#endDate").val(v);
-                $(e).select();
-                stop = true;
-
-              }
-            })
-      
-            //set start date to day value
-      
-            //set end date to day val + 1 day
-            //trigger change handlers for start day and end day on map
-            $("#startDate").trigger('change');
-            $("#endDate").trigger('change');
-          })
-        })
-
-        </script>
 			
 			<!-- additional content -->
 			<?php

@@ -51,10 +51,7 @@ if (isset($uri_segments))
 <script type="text/javascript" src="https://nav.occupy.net/occupynet_nav.js"></script>
   <!-- top bar -->
   <div id="top-bar">
-		
-		<!-- submit incident -->
-		<?php echo $submit_btn; ?>
-		<!-- / submit incident -->
+		<h1><span style="color:#fff">#Occupy</span>Map</h1>
 		
     <!-- searchbox -->
 		<div id="searchbox">
@@ -162,7 +159,7 @@ if (isset($uri_segments))
           var pos = $("#location_find").offset();
           $("#soulmate").css("position","absolute");
           $("#soulmate").css("top",pos.top +"px")
-          $("#soulmate").css("right","250px")
+          $("#soulmate").css("right","450px")
 
          // $("#soulmate").css("left",pos.left +"px")
 
@@ -202,7 +199,13 @@ if (isset($uri_segments))
         })
         
         $("#activity-menu-toggle").click(function(){
-          $("#activity-menu").toggle(400)
+          $("#activity-menu").toggle(400);
+          if ($("#activity-menu-toggle").hasClass("ic-down") ){
+            $("#activity-menu-toggle").removeClass("ic-down");
+          } else {
+            $("#activity-menu-toggle").addClass("ic-down");
+          }
+          
         })
       })
       </script>			
