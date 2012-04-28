@@ -146,10 +146,7 @@ class Users_Controller extends Admin_Controller
 			$user_id = ($user_id) ? $user_id : NULL;
 			$post =  array_merge($post, array('user_id' => $user_id));
 
-      //why did this break?
-			//if (User_Model::custom_validate($post))
-  		if (1==1)
-
+			if (User_Model::custom_validate($post))
 			{
 				$user = ORM::factory('user',$user_id);
 				$user->name = html::specialchars($post->name);

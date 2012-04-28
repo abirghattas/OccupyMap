@@ -13,7 +13,13 @@
  * @license    http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License (LGPL) 
  */
 ?>
+<?php
 
+//ugh what broke here?
+$form["password_again"] = (isset($form["password_again"])) ?$form["password_again"] :"";
+$form["password"] = (isset($form["password"])) ?$form["password"] :"";
+
+?>
 			<div class="bg">
 				<h2>
 					<?php admin::user_subtabs("users_edit", $display_roles); ?>

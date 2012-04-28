@@ -174,7 +174,7 @@ class Main_Controller extends Template_Controller {
     and i.incident_date < '".date("Y-m-d H:i:s",time())."'
     having distance < ".$z."
     order by  i.incident_date desc, distance asc
-    limit ".$page.", 20";
+    limit ".$page.", 30";
     return  $db->query($q);
   }
   
