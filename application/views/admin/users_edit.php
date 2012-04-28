@@ -13,6 +13,7 @@
  * @license    http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License (LGPL) 
  */
 ?>
+
 			<div class="bg">
 				<h2>
 					<?php admin::user_subtabs("users_edit", $display_roles); ?>
