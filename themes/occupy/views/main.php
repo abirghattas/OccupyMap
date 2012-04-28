@@ -43,32 +43,35 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 		</div>
 	<?php } ?>
 
-
+   
 		
-      <div id="activity-menu-box" style="position:relative; float:right; margin-top:20px;margin-left:-240px">
+      <div id="activity-menu-box" style="position:relative; float:right; top:40px;margin-left:-240px; height:0px; margin-top:0px">
         <!-- submit incident -->
-    		<div class="btns">
+    		<div class="btns" style="margin-bottom:-15px">
       		<?php echo $submit_btn; ?>
     		</div>
     		
     		
     		<!-- / submit incident -->
     		
-           <a class="btn toggle" id="activity-menu-toggle"  href="javascript:void(0)">Activity <span class="btn-icon ic-right">&raquo;</span></a>
+           <a class="btn toggle" id="activity-menu-toggle" href="javascript:void(0)">Activity <span class="btn-icon ic-right" style="margin-top:-15px">&raquo;</span></a>
              <div class="map-menu-box" id="activity-menu"  style="padding:10px">
-               <h5>Places</h5>
+               <?php if (count($active_locations)>0):?>
+                 <h5>Places</h5>
                <ul class="category-filters">
                  <?php foreach($active_locations as $location):?>
                    <li><a href="/reports/view_location/<?=$location["id"]?>"><?=$location["location_name"]?></a> (<?=$location["num_incidents"]?>)</li>
                  <?php endforeach?>
-                
                </ul>
+             <?php endif?>
+             <?php if (count($key_dates)>0):?>
                <h5>Dates</h5>
                <ul class="category-filters">
                    <?php foreach ($key_dates as $day): ?>
                       <li><a class="datepick" rel="<?=$day["timestamp"]?>" href="javascript:void(0)"?><?=$day["date"]?></a>(<?=$day["num_incidents"]?>)</li>
                     <?php endforeach ?>
                </ul>
+               <?php endif?>
             </div>
              
     				

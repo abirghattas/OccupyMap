@@ -383,7 +383,6 @@ class Reports_Controller extends Main_Controller {
 		$this->template->content->disp_custom_fields = $disp_custom_fields;
 		$this->template->content->stroke_width_array = $this->_stroke_width_array();
 		$this->template->content->custom_forms->disp_custom_fields = $disp_custom_fields;
-		$this->template->content->custom_forms->form = $form;
 
 		// Javascript Header
 		$this->themes->map_enabled = TRUE;
@@ -396,9 +395,25 @@ class Reports_Controller extends Main_Controller {
 		$this->themes->js->incident_zoom = FALSE;
 		$this->themes->js->default_map = Kohana::config('settings.default_map');
 		$this->themes->js->default_zoom = Kohana::config('settings.default_zoom');
+		if (isset($_GET["location_id"])) {
+		  $location = ORM::factory('location')
+		    ->where('id',(int)$_GET["location_id"])
+		    ->find();
+		  $form['latitude'] = $location->latitude;
+		  $form['longitude'] = $location->longitude;
+		  $form["location_name"] = $location->location_name;
+		  $this->themes->js->latitude = $location->latitude;
+		  $this->themes->js->longitude = $location->longitude;
+		  $this->themes->js->default_zoom = 16;
+		  $this->template->content->location_name = $location->location_name;
+		  
+		} else {
+		  $this->template->content->location_name = "";
+		}
+		
 		if (!$form['latitude'] OR !$form['latitude'])
 		{
-	    	if (is_array($this->session->get('city_local'))) {
+	    	if (is_array($this->session->get('city_local')) && !isset($_GET["location_id"])) {
                 $city = $this->session->get('city_local');
             	$this->themes->js->latitude = $city['city_lat'];
         		$this->themes->js->longitude = $city['city_lon'];
@@ -413,7 +428,7 @@ class Reports_Controller extends Main_Controller {
 			$this->themes->js->longitude = $form['longitude'];
 		}
 		$this->themes->js->geometries = $form['geometry'];
-
+    $this->template->content->custom_forms->form = $form;
 		
 		// Rebuild Header Block
 		$this->template->header->header_block = $this->themes->header_block();

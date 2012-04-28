@@ -1,9 +1,13 @@
 <div id="main" class="report_detail">
 	<div style="width:950px;">
+	  <div class="submit-incident" style="top:-5px;z-index:2000; position:relative; width:200px; float:right"><a href="http://localhost:8872/reports/submit/?location_id=<?=$location->id?>">Add a Story about <?=$location->location_name?></a></div>	
+
 	  <h4><?=$location->location_name?></h4>
+    
 		<div class="report-media-box-content">
 			
 			<div id="report-map" class="report-map report-map-location">
+			  
 				<div class="map-holder" id="map" style="width:935px; height:350px"></div>
           
           <script type="text/javascript">
@@ -120,7 +124,8 @@ foreach ($videos as $v) {
 
 
 	</div>
-
+  	  <div class="submit-incident" style="top:-5px;z-index:2000; position:relative; width:450px; margin-right:25px; float:right"><a href="http://localhost:8872/reports/submit/?location_id=<?=$location->id?>">Add a Story about <?=$location->location_name?></a></div>
+  	  <br clear="all"/>
 	<div class="left-col" style="float:left;width:520px; margin-right:20px">
 
 		<h1 id="incident-title" class="report-title"><?php
@@ -400,9 +405,13 @@ foreach ($videos as $v) {
   $incident_list[] = $an_incident;
 
   ?>
-  
+
 	<div id="incidents_list" class="incidents report-additional-reports">
-	  <?php foreach ($incident_list as $neighbor): 
+	  	<!-- / logo -->
+			
+			<!-- submit incident -->
+					<!-- / submit incident -->
+		<?php foreach ($incident_list as $neighbor): 
 	  //has video
     //has photo
     //show category

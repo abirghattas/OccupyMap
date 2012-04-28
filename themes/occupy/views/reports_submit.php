@@ -1,3 +1,8 @@
+<?php
+if (strlen($location_name)>1){
+  $form["location_name"] = $location_name;
+}
+?>
 <div id="content">
 	<div class="content-bg">
 
@@ -193,6 +198,7 @@
 				<?php Event::run('ushahidi_action.report_form_location', $id); ?>
 				<div class="report_row">
 					<h4><?php echo Kohana::lang('ui_main.reports_location_name'); ?><br /><span class="example"><?php echo Kohana::lang('ui_main.detailed_location_example'); ?></span></h4>
+					
 					<?php print form::input('location_name', $form['location_name'], ' class="text long" autocomplete="off"'); ?>
 				</div>
 

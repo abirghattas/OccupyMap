@@ -150,11 +150,18 @@ class Main_Controller extends Template_Controller {
 		
 	}
   //gets recent media for slideshows
-  
-  function get_media($page=0){    
-    $lat =( strlen($this->themes->js->latitude)>0) ? $this->themes->js->latitude : 40.0;
-    $lon = (strlen($this->themes->js->longitude) >0 ) ? $this->themes->js->longitude:-70.0;
-    $zoom = $this->themes->js->default_zoom+0;
+  //add a distance and lat lon to this 
+  //this will already get media for a city
+  function get_media($page=0,$media_type=1,$zoom=null,$lat=null,$lon=null){
+    if ($lat==null){
+      $lat=( strlen($this->themes->js->latitude)>0) ? $this->themes->js->latitude : 40.0;
+    }    
+    if ($lon==null) {
+      $lon = (strlen($this->themes->js->longitude) >0 ) ? $this->themes->js->longitude:-70.0;
+    }
+    if ($zoom==null){
+      $zoom = $this->themes->js->default_zoom+0;
+    }
     $db = new Database();
     $z = 20000 / (pow(1.8,$zoom));
     //incident report time nearest in time to selected event
@@ -163,12 +170,80 @@ class Main_Controller extends Template_Controller {
     from media m
     join incident i on m.incident_id = i.id
     join location l on m.location_id = l.id
-    where m.media_type=1
+    where m.media_type=".$media_type."
     and i.incident_date < '".date("Y-m-d H:i:s",time())."'
     having distance < ".$z."
     order by  i.incident_date desc, distance asc
-    limit ".$page.", 40";
+    limit ".$page.", 20";
     return  $db->query($q);
+  }
+  
+  #returns a json string which is an array of incident objects
+  public function get_media_ajax($page=0,$media_type=1,$zoom=4,$lat=40,$lon=1.0){
+    $media = $this->get_media(0,1,$zoom,$lat,$lon);
+    $out = array();
+    foreach ($media as $m) {
+      $out[]=$m;
+    }
+    echo json_encode($out);
+    exit();
+  }
+
+//have to attach the distance query to this
+  private function get_key_dates($page=0) {
+    //get all incidents, cluster by date
+     $lat=( strlen($this->themes->js->latitude)>0) ? $this->themes->js->latitude : 40.0;
+     $lon = (strlen($this->themes->js->longitude) >0 ) ? $this->themes->js->longitude:-70.0;
+     $zoom = $this->themes->js->default_zoom+0;
+     $db = new Database();
+     $z = 20000 / (pow(1.8,$zoom));
+     //incident report time nearest in time to selected event
+     $q = "select i.*, DATE(i.incident_date) as day, i.incident_date, count(i.id) as num_incidents,
+           ((ACOS(SIN(".$lat." * PI() / 180) * SIN(l.`latitude` * PI() / 180) + COS(".$lat." * PI() / 180) * COS(l.`latitude` * PI() / 180) * COS((".$lon." - l.`longitude`) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS distance
+      from incident i
+      join location l on i.location_id = l.id
+      group by day 
+     having distance < ".$z."
+     order by num_incidents desc
+     limit ".$page.", 5";
+    $query = $db->query($q);
+    $key_dates = array();
+    foreach ($query as $data) {
+      $key_dates[] = array("date"=>date("F j, Y",strtotime($data->day)), "timestamp"=>strtotime($data->day), "num_incidents"=>$data->num_incidents);
+    }
+    $sort = array();
+    foreach ($key_dates as $d) {
+      $sort[$d["timestamp"]] = $d;
+    }
+    ksort($sort);
+    return $sort;
+  }
+
+  //have to attach the distance query to this
+  private function get_active_locations($page=0,$interval=30){
+    $lat=( strlen($this->themes->js->latitude)>0) ? $this->themes->js->latitude : 40.0;
+    $lon = (strlen($this->themes->js->longitude) >0 ) ? $this->themes->js->longitude:-70.0;
+    $zoom = $this->themes->js->default_zoom+0;
+    $db = new Database();
+    $z = 20000 / (pow(1.8,$zoom));
+    $q = "select l.location_name, l.id, i.incident_date, count(l.id) as num_incidents, 
+           ((ACOS(SIN(".$lat." * PI() / 180) * SIN(l.`latitude` * PI() / 180) + COS(".$lat." * PI() / 180) * COS(l.`latitude` * PI() / 180) * COS((".$lon." - l.`longitude`) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS distance
+       from location l
+       join incident i on i.location_id = l.id
+          where location_name != 'Unknown' and incident_date 
+          BETWEEN CURDATE() - INTERVAL ".$interval." DAY AND CURDATE()
+       group by location_name
+    
+       having distance < ".$z."
+      order by num_incidents desc
+       limit ".$page.", 5";
+    
+    $query = $db->query($q);
+    $active_locations = array();
+    foreach ($query as $data ) {
+      $active_locations[]= array("location_name" => $data->location_name, "id"=>$data->id, "num_incidents"=>$data->num_incidents );
+    }
+    return $active_locations;
   }
 
 	/**
@@ -457,34 +532,8 @@ class Main_Controller extends Template_Controller {
 		
 		$this->template->content->div_timeline->startDate = $startDate;
 		$this->template->content->div_timeline->endDate = $endDate;
-		
-		
 
     //get all locations, count incidents within 30 days, rank
-    
-    $query = $db->query('
-      select location_name, location.id, incident_date, count(location.id) as num_incidents from location 
-      join incident on incident.location_id = location.id
-      where location_name != "Unknown" and incident_date  BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() group by location_name order by num_incidents desc limit 8 
-    ');
-    $active_locations = array();
-    foreach ($query as $data ) {
-      $active_locations[]= array("location_name" => $data->location_name, "id"=>$data->id, "num_incidents"=>$data->num_incidents );
-    }
-    //get all incidents, cluster by date
-    $query = $db->query('select incident.*, DATE(incident_date) as day, incident_date, count(id) as num_incidents from incident where incident_date  group by day order by num_incidents desc limit 8');
-    $key_dates = array();
-    foreach ($query as $data) {
-      $key_dates[] = array("date"=>date("F j, Y",strtotime($data->day)), "timestamp"=>strtotime($data->day), "num_incidents"=>$data->num_incidents);
-    }
-    $sort = array();
-    foreach ($key_dates as $d) {
-      $sort[$d["timestamp"]] = $d;
-    }
-    ksort($sort);
-    $key_dates = $sort;
-    $this->template->content->key_dates = $key_dates;
-    $this->template->content->active_locations = $active_locations;
 		// Javascript Header
 		$this->themes->map_enabled = TRUE;
 		$this->themes->main_page = TRUE;
@@ -531,6 +580,8 @@ class Main_Controller extends Template_Controller {
 		$this->themes->js->latFrom = $latFrom;
 		$this->themes->js->lonTo = $lonTo;
 		$this->themes->js->latTo = $latTo;
+		
+		//zoom into a city based on search parameters
     if (is_array($this->session->get('city_local'))) {
         $city = $this->session->get('city_local');
         $this->themes->js->default_zoom = 12;
@@ -541,18 +592,21 @@ class Main_Controller extends Template_Controller {
   		$this->themes->js->latitude = Kohana::config('settings.default_lat');
   		$this->themes->js->longitude = Kohana::config('settings.default_lon');
     }
+	  //activity for this map region
+	  $this->template->content->key_dates = $this->get_key_dates();
+	  $this->template->content->active_locations = $this->get_active_locations(); 
+
 
 
 		//slideshow widget 
 		$this->template->content->slideshow = $this->get_media();
-
 		$this->themes->js->default_map = Kohana::config('settings.default_map');
 		$this->themes->js->default_map_all = Kohana::config('settings.default_map_all');
-
 		$this->themes->js->active_startDate = $display_startDate;
 		$this->themes->js->active_endDate = $display_endDate;
-		
 		$this->themes->js->blocks_per_row = Kohana::config('settings.blocks_per_row');
+
+
 
 		//$myPacker = new javascriptpacker($js , 'Normal', false, false);
 		//$js = $myPacker->pack();
