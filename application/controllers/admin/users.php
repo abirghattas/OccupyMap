@@ -115,7 +115,7 @@ class Users_Controller extends Admin_Controller
 			'username'  => '',
 			'name'      => '',
 			'email'     => '',
-            'password'  => '',
+      'password'  => '',
 			'notify'    => '',
 			'role'      => ''
 		);
@@ -239,6 +239,9 @@ class Users_Controller extends Admin_Controller
 						'username'  => $user->username,
 						'name'      => $user->name,
 						'email'     => $user->email,
+						'password' =>'',
+						'password_again' =>'',
+
 						'notify'    => $user->notify,
 						'role'      => $role
 					);
