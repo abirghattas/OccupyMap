@@ -548,9 +548,9 @@ class reports_Core {
 		$person = new Incident_Person_Model();
 		$person->location_id = $incident->location_id;
 		$person->incident_id = $incident->id;
-		$person->person_first = $post->person_first;
-		$person->person_last = $post->person_last;
-		$person->person_email = $post->person_email;
+		$person->person_first =isset( $post->person_first) ?$post->person_first: "" ;
+		$person->person_last = isset( $post->person_last) ?$post->person_last: "" ;
+		$person->person_email = isset( $post->person_email) ?$post->person_email: "" ;
 		$person->person_date = date("Y-m-d H:i:s",time());
 		$person->save();		
 	}
