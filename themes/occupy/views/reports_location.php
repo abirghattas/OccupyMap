@@ -1,6 +1,6 @@
 <div id="main" class="report_detail">
 	<div style="width:950px;">
-	  <div class="submit-incident" style="top:-5px;z-index:2000; position:relative; width:200px; float:right"><a href="http://localhost:8872/reports/submit/?location_id=<?=$location->id?>">Add a Story about <?=$location->location_name?></a></div>	
+	  <div class="submit-incident" style="top:-5px;z-index:2000; position:relative; width:200px; float:right"><a href="/reports/submit/?location_id=<?=$location->id?>">Add a Story about <?=$location->location_name?></a></div>	
 
 	  <h4><?=$location->location_name?></h4>
     
@@ -124,7 +124,7 @@ foreach ($videos as $v) {
 
 
 	</div>
-  	  <div class="submit-incident" style="top:-5px;z-index:2000; position:relative; width:450px; margin-right:25px; float:right"><a href="http://localhost:8872/reports/submit/?location_id=<?=$location->id?>">Add a Story about <?=$location->location_name?></a></div>
+  	  <div class="submit-incident" style="top:-5px;z-index:2000; position:relative; width:450px; margin-right:25px; float:right"><a href="/reports/submit/?location_id=<?=$location->id?>">Add a Story about <?=$location->location_name?></a></div>
   	  <br clear="all"/>
 	<div class="left-col" style="float:left;width:520px; margin-right:20px">
 
