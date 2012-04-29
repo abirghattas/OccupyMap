@@ -230,8 +230,7 @@ class Main_Controller extends Template_Controller {
            ((ACOS(SIN(".$lat." * PI() / 180) * SIN(l.`latitude` * PI() / 180) + COS(".$lat." * PI() / 180) * COS(l.`latitude` * PI() / 180) * COS((".$lon." - l.`longitude`) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS distance
        from location l
        join incident i on i.location_id = l.id
-          where location_name != 'Unknown' and incident_date 
-          BETWEEN CURDATE() - INTERVAL ".$interval." DAY AND CURDATE()
+                    where location_name != 'Unknown' and incident_date BETWEEN (CURDATE() - INTERVAL ".$interval." DAY) AND (CURDATE() + INTERVAL 1 DAY)
        group by location_name
     
        having distance < ".$z."
@@ -241,7 +240,7 @@ class Main_Controller extends Template_Controller {
     $query = $db->query($q);
     $active_locations = array();
     foreach ($query as $data ) {
-      $active_locations[]= array("location_name" => $data->location_name, "id"=>$data->id, "num_incidents"=>$data->num_incidents );
+      $active_locations[]= array("location_name" => $data->location_name, "id"=>$data->id, "num_incidents"=>$data->num_incidents,"distance"=>$data->distance,"date"=>$data->incident_date);
     }
     return $active_locations;
   }

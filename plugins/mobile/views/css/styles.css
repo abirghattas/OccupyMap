@@ -346,3 +346,15 @@ div.red-box ul{
     border: 1px solid #EEE;
     color: #DDD;
 }
+
+#neighbors li {
+  border-bottom: 1px #999 dashed;
+  margin-bottom:10px;
+}
+li .date {
+  color:#999;
+}
+li .description {
+  margin-bottom:10px;
+}
+

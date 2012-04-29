@@ -296,15 +296,22 @@ class Reports_Controller extends Mobile_Controller {
 			
 		}
 		
-		
+		if (isset($_GET["location_id"])) {
+		  $location = ORM::factory('location')
+		    ->where('id',(int)$_GET["location_id"])
+		    ->find();
+		  $form['latitude'] = $location->latitude;
+		  $form['longitude'] = $location->longitude;
+		  $form["location_name"] = $location->location_name;
+	  } else {
+	  
+	  }
 		
 		
 		$this->template->content->form = $form;
 		$this->template->content->errors = $errors;
 		$this->template->content->form_error = $form_error;
 		$this->template->content->categories = $this->_get_categories($form['incident_category']);
-		
-		$this->template->content->cities = $this->_get_cities();
 		
 		$this->template->header->js = new View('mobile/reports_submit_js');
 		if (!$form['latitude'] || !$form['latitude'])

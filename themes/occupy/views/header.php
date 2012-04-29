@@ -112,7 +112,6 @@ if (isset($uri_segments))
               };
               select = function(term, data, type) {
                 window.location.replace(site_url + data.url);
-               // return console.log(site_url + data.url);
 
               };
               
@@ -179,7 +178,6 @@ if (isset($uri_segments))
 					     url:"http://map.occupy.net:9494/video/"+v_url,
 					     dataType:'json',
 					     success:function(data) {
-					       console.log(data);
 					       $("#incident_title").val(data.title);
 					       $("#incident_description").val(data.url +" \n \n"+ data.description);
 					       $("input.video").first().val(v_url);

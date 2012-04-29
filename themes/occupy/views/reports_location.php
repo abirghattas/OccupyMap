@@ -322,7 +322,6 @@ foreach ($videos as $v) {
            "id":id
          },
     	   success:function(data){
-    	     console.log(data);
     	    var desc = '<h5><?php echo Kohana::lang('ui_main.reports_description');?></h5>';
     	    var verified = '<?=Kohana::lang("ui_main.verified")?>';
     	    var unverified = '<?=Kohana::lang("ui_main.unverified")?>';

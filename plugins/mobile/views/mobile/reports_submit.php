@@ -83,7 +83,7 @@
 			<h4><?php echo Kohana::lang('ui_main.reports_categories'); ?> (Select All That Apply)</h4>
 			<div class="report_category" id="categories">
 				<?php
-				$selected_categories = array();
+				$selected_categories = array(16);
      if (!empty($form['incident_category']) && is_array($form['incident_category'])) {
 					$selected_categories = $form['incident_category'];
 				}
@@ -95,9 +95,7 @@
 		
 		<div class="report_row">
 			<h4>Location</h4>
-			<span class="location">Select A Location from the Drop-Down</span>
-			<?php print form::dropdown('select_city',$cities,'', ' class="select" '); ?>
-			<span class="location">OR Enter A Location</span>
+			<span class="location">Enter A Location</span>
 			<?php print form::input('location_name', $form['location_name'], ' class="text long"'); ?>
 		</div>
 		
