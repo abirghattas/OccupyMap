@@ -144,7 +144,7 @@ class Mobile_Controller extends Template_Controller {
 	*/
 //
 function recent_activity($lat = 0, $lon = 0, $page = 0,$interval=30){
-  $zoom = 12;
+  $zoom = 10;
   $db = new Database();
   $z = 20000 / (pow(1.8,$zoom));
   //can't do a group by here because they order incorrectly
@@ -175,7 +175,7 @@ function recent_activity($lat = 0, $lon = 0, $page = 0,$interval=30){
 
 	
 	function nearby_places($lat = 0, $lon = 0, $page = 0,$interval=30){
-    $zoom = 12;
+    $zoom = 10;
     $db = new Database();
     $z = 20000 / (pow(1.8,$zoom));
     $q = "select l.location_name, l.id, i.incident_date, count(l.id) as num_incidents, 

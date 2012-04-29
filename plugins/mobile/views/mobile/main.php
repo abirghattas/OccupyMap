@@ -9,7 +9,9 @@
     Select "Recent Activity" to see the most active places near you today. 
   </div>
   <div>
-    Clicking on a place name will take you to the homepage from that place.  There you can view activity for that place, or add your own story about that place.  To see photos and videos, view the full website.
+    Clicking on a place name will take you to the homepage from that place.  There you can view activity for that place, or add your own story about that place.  These features require that your location services are on.  
+    "Nearby Places" and "Recent Activity" have not been tested on Android devices.<br/>
+    "Recent Reports" will show you the most recent reports world-wide (not location-based, works on any device)<Br/>
   </div>
   <br/><br/>
 </div>
@@ -30,6 +32,22 @@
   </div>
   
 </div>
+
+<div class="block">
+  <h2 class="expand">Recent Reports</h2>
+  <div class="collapse">
+      <ul>
+          <?php
+          foreach ($incidents as $incident)
+          {
+              $incident_date = $incident->incident_date;
+              $incident_date = date('M j Y', strtotime($incident->incident_date));
+              echo "<li><strong><a href=\"".url::site()."mobile/reports/view/".$incident->id."\">".$incident->incident_title."</a></strong>";
+              echo "&nbsp;&nbsp;<i>$incident_date</i></li>";
+          }
+          ?>
+      </ul>
+  </div>
 
 
 <div class="block">
