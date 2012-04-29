@@ -58,6 +58,8 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
              <div class="map-menu-box" id="activity-menu"  style="padding:10px">
                <?php if (count($active_locations)>0):?>
                  <h5>Places</h5>
+              <p>Most active places in the past 30 days</p>
+              <br/>
                <ul class="category-filters">
                  <?php foreach($active_locations as $location):?>
                    <li><a href="/reports/view_location/<?=$location["id"]?>"><?=$location["location_name"]?></a> (<?=$location["num_incidents"]?>)</li>
