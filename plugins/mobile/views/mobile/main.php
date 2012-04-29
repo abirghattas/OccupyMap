@@ -1,19 +1,23 @@
 <div class="block">
 <a href="<?php echo url::site() ?>?full=1">View Full Website</a>
 </div>
-<div class="content">
-  <div>
-    Select "Nearby Places" to see the 25 places nearest to you that have had Occupy activity in the past 30 days.   
-  </div>
-  <div>
-    Select "Recent Activity" to see the most active places near you today. 
-  </div>
-  <div>
-    Clicking on a place name will take you to the homepage from that place.  There you can view activity for that place, or add your own story about that place.  These features require that your location services are on.  
-    "Nearby Places" and "Recent Activity" have not been tested on Android devices.<br/>
-    "Recent Reports" will show you the most recent reports world-wide (not location-based, works on any device)<Br/>
-  </div>
-  <br/><br/>
+<h2>Welcome to OccupyMap Mobile</h2>
+
+<div class="block">
+  <h2 class="expand">Help</h2>
+  <div class="collapse">
+      <div>
+        Select "Nearby Places" to see the 25 places nearest to you that have had Occupy activity in the past 30 days.   
+      </div>
+      <div>
+        Select "Recent Activity" to see the most active places near you today. 
+      </div>
+      <div>
+        Clicking on a place name will take you to the homepage from that place.  There you can view activity for that place, or add your own story about that place.  These features require that your location services are on.  
+        "Nearby Places" and "Recent Activity" have not been tested on Android devices.<br/>
+        "Recent Reports" will show you the most recent reports world-wide (not location-based, works on any device)<Br/>
+      </div>
+    </div>
 </div>
 
 <div class="block">
