@@ -13,7 +13,10 @@
         Select "Recent Activity" to see the most active places near you today. 
       </div>
       <div>
-        Clicking on a place name will take you to the homepage from that place.  There you can view activity for that place, or add your own story about that place.  These features require that your location services are on.  
+         <strong>These features require that your location services are on. </strong> If you are in a city that has not had any OccupyMap activity, this app may not show any nearby activity.
+      </div>
+      <div>
+        Clicking on a place name will take you to the homepage from that place.  There you can view activity for that place, or add your own story about that place. 
         "Nearby Places" and "Recent Activity" have not been tested on Android devices.<br/>
         "Recent Reports" will show you the most recent reports world-wide (not location-based, works on any device)<Br/>
       </div>
