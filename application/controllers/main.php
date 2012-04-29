@@ -220,7 +220,7 @@ class Main_Controller extends Template_Controller {
   }
 
   //have to attach the distance query to this
-  private function get_active_locations($page=0,$interval=30){
+  private function get_active_locations($page=0,$interval=240){
     $lat=( strlen($this->themes->js->latitude)>0) ? $this->themes->js->latitude : 40.0;
     $lon = (strlen($this->themes->js->longitude) >0 ) ? $this->themes->js->longitude:-70.0;
     $zoom = $this->themes->js->default_zoom+0;
