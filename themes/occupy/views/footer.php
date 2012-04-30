@@ -77,10 +77,14 @@
 	Event::run('ushahidi_action.main_footer');
 	
 	/* google analytics doesn't work ?  log stats directly*/
-	$server_json = json_encode($_SERVER);
+	$server_json ="";
   $timestamp = date("Y-m-d H:i:s",time());
   $db = new Database();
-  $db->query("insert into stats (server_json, read_time) values ('".$server_json."','".$timestamp."')");
+  $ref = (isset($_SERVER["HTTP_REFERER"])) ? $_SERVER["HTTP_REFERER"] : "";
+  $ip = $_SERVER["REMOTE_ADDR"];
+  $host = gethostbyaddr($_SERVER["REMOTE_ADDR"]);
+  $page = isset($_SERVER["REQUEST_URI"]) ? $_SERVER["REQUEST_URI"] : "";
+  $db->query("insert into stats (server_json, read_time, referer, ip, rhost, page) values ('".$server_json."','".$timestamp."','".$ref."','".$ip."','".$host."','".$page."')");
 	?>
 	
 </body>
