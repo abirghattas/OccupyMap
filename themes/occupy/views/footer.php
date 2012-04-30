@@ -75,6 +75,13 @@
 	<?php
 	// Action::main_footer - Add items before the </body> tag
 	Event::run('ushahidi_action.main_footer');
+	
+	/* google analytics doesn't work ?  log stats directly*/
+	$server_json = json_encode($_SERVER);
+  $timestamp = date("Y-m-d H:i:s",time());
+  $db = new Database();
+  $db->query("insert into stats (server_json, read_time) values ('".$server_json."','".$timestamp."')");
 	?>
+	
 </body>
 </html>
