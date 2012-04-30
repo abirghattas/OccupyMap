@@ -23,9 +23,7 @@
  *           This is also known as 128-bit AES.
  *           @see http://php.net/mcrypt
  */
-$config['default'] = array
-(
-	'key'    => 'K0H@NA+PHP_7hE-SW!FtFraM3w0R|<',
-	'mode'   => MCRYPT_MODE_NOFB,
-	'cipher' => MCRYPT_RIJNDAEL_128
-);
+// CHANGE ME: THIS SHOULD BE UNIQUE TO YOUR DEPLOYMENT
+$config['default']['key'] = 'hello,govermentagents!';
+$config['default']['mode'] = MCRYPT_MODE_NOFB;
+$config['default']['cipher'] = MCRYPT_RIJNDAEL_128;
