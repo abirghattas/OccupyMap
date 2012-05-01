@@ -84,7 +84,7 @@
   $ip_hash = SHA1($_SERVER["REMOTE_ADDR"]);
   $host ="";
   $page = isset($_SERVER["REQUEST_URI"]) ? $_SERVER["REQUEST_URI"] : "";
-  $db->query("insert into stats (server_json, read_time, referer, ip_hash, rhost, page) values ('".$server_json."','".$timestamp."','".$ref."','".$ip."','".$host."','".$page."')");
+  $db->query("insert into stats (server_json, read_time, referer, ip_hash, rhost, page) values ('".$server_json."','".$timestamp."','".$ref."','".$ip_hash."','".$host."','".$page."')");
 	?>
 	
 </body>
