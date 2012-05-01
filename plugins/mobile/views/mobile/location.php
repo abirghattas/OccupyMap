@@ -19,7 +19,14 @@
   }
 
 </script>
+
 <h2><?=$location->location_name?></h2>
+
+
+<div class="block">
+	<h2 class="submit"><a href="<?php echo url::site()."mobile/reports/submit/?location_id=".$location->id ?>">Add a Story about <?=$location->location_name?></a></h2>
+</div>
+
 <div id="map_canvas"></div>
 <div class="block">
 	<h2 class="submit"><a href="<?php echo url::site()."mobile/reports/submit/?location_id=".$location->id ?>">Add a Story about <?=$location->location_name?></a></h2>

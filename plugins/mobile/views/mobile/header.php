@@ -55,6 +55,9 @@ $(document).ready(function(){
           e.distance = (Math.round(100*e.distance))/100;
           incidents += "<li><a href=\"/mobile/locations/"+e.id+"\">"+e.location_name+"</a> - Distance: "+e.distance+"mi - Last Activity: "+e.date+"</li>";
         })
+        if (data.length==0) {
+          incidents = "<h3>There is no recent activity near you.</h3>"
+        }
         $("#recent-activity").html(incidents);
       }
     })
@@ -80,7 +83,7 @@ if ($show_map === TRUE) {
 ?>>
 	<div id="container">
 		<div id="header">
-			<h1><?php echo $site_name; ?></h1>
+			<h1><a href="/mobile/">#Occupy<span class="yellow">Map</a></a></h1>
 			<span><?php echo $site_tagline; ?></span>
 		</div>
 		<div id="navigation">
