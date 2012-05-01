@@ -81,10 +81,10 @@
   $timestamp = date("Y-m-d H:i:s",time());
   $db = new Database();
   $ref = (isset($_SERVER["HTTP_REFERER"])) ? $_SERVER["HTTP_REFERER"] : "";
-  $ip = $_SERVER["REMOTE_ADDR"];
-  $host = gethostbyaddr($_SERVER["REMOTE_ADDR"]);
+  $ip_hash = SHA1($_SERVER["REMOTE_ADDR"]);
+  $host ="";
   $page = isset($_SERVER["REQUEST_URI"]) ? $_SERVER["REQUEST_URI"] : "";
-  $db->query("insert into stats (server_json, read_time, referer, ip, rhost, page) values ('".$server_json."','".$timestamp."','".$ref."','".$ip."','".$host."','".$page."')");
+  $db->query("insert into stats (server_json, read_time, referer, ip_hash, rhost, page) values ('".$server_json."','".$timestamp."','".$ref."','".$ip."','".$host."','".$page."')");
 	?>
 	
 </body>
