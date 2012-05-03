@@ -54,11 +54,11 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
       		<div class="submit-incident clearingfix" style="margin-top:30px">
       		  <a id="share-map" style="background-color:#336699" href="javascript:void(0)">Share Map</a>
       		</div>
-  				  <div id="share-map-link" style="display:none; background:#fff; width:640px; height:30px; padding:10px;border-radius:5px; float:right; right:-230px; top:65px; box-shadow: 0 2px 0 #948F82; position:absolute;">
-              Use this link to share your stories from this time and place.
-              <div class="link" style="font-weight:bold;">
+  				  <div id="share-map-link" style="display:none; background:#fff; width:320px; height:40px; padding:10px;border-radius:5px; float:right; right:-230px; top:65px; box-shadow: 0 2px 0 #948F82; position:absolute;">
+              Use this link to share the current map.
+              <br/>
+              <input class="link" style="font-weight:bold; width:300px; margin-top:5px" value=""/>
                 
-              </div>
               
   				  </div>
     		</div>
@@ -116,7 +116,7 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
           var zoom = "zoom="+map.zoom;
           $("#share-map-link").toggle();
           $("#activity-menu").hide();
-          $("#share-map-link").find(".link").html(site+"?"+start+"&"+end+"&"+lat+"&"+lon+"&"+zoom);
+          $("#share-map-link").find(".link").val(site+"?"+start+"&"+end+"&"+lat+"&"+lon+"&"+zoom);
         })
         
         
