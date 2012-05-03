@@ -323,5 +323,35 @@ if (strlen($location_name)>1){
 <script type="text/javascript">
     $(document).ready(function(){
         $("div.report_row").show();
-    })
+            //youtube prepopulate on submit forms
+             $("#check_youtube").change(function(){
+    				   //do the youtube query, get json and prepopulate
+              v_url = $("#check_youtube").val();
+              $("#incident_title").css("background-color","#ffc");
+              $("#incident_description").css("background-color","#ffc");
+              $("#incident_title").val("Loading...");
+              $("#incident_description").val("Loading...");
+
+              if ((v_url.split("youtube.com").length >1 )|| (v_url.split("vimeo.com").length >1)) {
+    					   $.ajax({
+    					     url:"http://map.occupy.net:9494/video/"+v_url,
+    					     dataType:'json',
+    					     success:function(data) {
+    					       $("#incident_title").val(data.title);
+    					       $("#incident_description").val(data.url +" \n \n"+ data.description);
+    					       $("input.video").first().val(v_url);
+                     $("#incident_title").css("background-color","#fff");
+                     $("#incident_description").css("background-color","#fff");
+
+
+                    //set the date also.  would be great to prompt a location
+    					     }
+    					   })
+              }
+
+    				 })
+           })
+
+
+    
 </script>

@@ -221,6 +221,8 @@ class Main_Controller extends Template_Controller {
 
   //have to attach the distance query to this
   private function get_active_locations($page=0,$interval=30){
+    
+    
     $lat=( strlen($this->themes->js->latitude)>0) ? $this->themes->js->latitude : 40.0;
     $lon = (strlen($this->themes->js->longitude) >0 ) ? $this->themes->js->longitude:-70.0;
     $zoom = $this->themes->js->default_zoom+0;
@@ -238,6 +240,15 @@ class Main_Controller extends Template_Controller {
        limit ".$page.", 5";
     
     $query = $db->query($q);
+    //weight this - decay by log of days since
+    /*
+    this has to be done before they are aggregated in the query :(
+    $weighted = array();
+    foreach ($query as $data) {
+      $score = $data->num_incidents * log(3+((time() - strtotime($data->incident_date))/86400));
+      $weighted[$location_id] = array("score"=>$score, "data"=>$data);
+    }
+    */
     $active_locations = array();
     foreach ($query as $data ) {
       $active_locations[]= array("location_name" => $data->location_name, "id"=>$data->id, "num_incidents"=>$data->num_incidents,"distance"=>$data->distance,"date"=>$data->incident_date);
@@ -591,6 +602,13 @@ class Main_Controller extends Template_Controller {
   		$this->themes->js->latitude = Kohana::config('settings.default_lat');
   		$this->themes->js->longitude = Kohana::config('settings.default_lon');
     }
+    
+    if (isset($_GET["lat"]) && isset($_GET["lon"]) && isset($_GET["zoom"])) {
+      $this->themes->js->latitude = (float)$_GET["lat"];
+      $this->themes->js->longitude = (float)$_GET["lon"];
+      $this->themes->js->default_zoom = (int)$_GET["zoom"];
+    }
+    
 	  //activity for this map region
 	  $this->template->content->key_dates = $this->get_key_dates();
 	  $this->template->content->active_locations = $this->get_active_locations(); 
@@ -613,6 +631,13 @@ class Main_Controller extends Template_Controller {
 		// Rebuild Header Block
 		
 		$this->template->header->header_block = $this->themes->header_block();
+	}
+	
+	private function stats(){
+	  $server_json = json_encode($_SERVER);
+	  $timestamp = date("Y-m-d H:i:s",time());
+	  $db = new Database();
+    $db->query("insert into stats (server_json, timestamp) values ('".$server_json."','".$timestamp.")");
 	}
 
 } // End Main

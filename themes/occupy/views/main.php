@@ -1,3 +1,5 @@
+
+
 <link href="http://map.occupy.net/media/css/picbox/picbox.css" type="text/css" rel="stylesheet">
 <script src="http://map.occupy.net/media/js/picbox.js" type="text/javascript">
 <script type="text/javascript">
@@ -45,17 +47,30 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
 
    
 		
-      <div id="activity-menu-box" style="position:relative; float:right; top:40px;margin-left:-240px; height:0px; margin-top:0px">
+      <div id="activity-menu-box" style="position:relative; float:right; top:40px;margin-left:-240px;  padding-right:40px; height:0px; margin-top:0px">
         <!-- submit incident -->
     		<div class="btns" style="margin-bottom:-15px">
       		<?php echo $submit_btn; ?>
+      		<div class="submit-incident clearingfix" style="margin-top:30px">
+      		  <a id="share-map" style="background-color:#336699" href="javascript:void(0)">Share Map</a>
+      		</div>
+  				  <div id="share-map-link" style="display:none; background:#fff; width:640px; height:30px; padding:10px;border-radius:5px; float:right; right:-230px; top:65px; box-shadow: 0 2px 0 #948F82; position:absolute;">
+              Use this link to share your stories from this time and place.
+              <div class="link" style="font-weight:bold;">
+                
+              </div>
+              
+  				  </div>
     		</div>
+    	  
     		
+    		
+				
     		
     		<!-- / submit incident -->
     		
-           <a class="btn toggle" id="activity-menu-toggle" href="javascript:void(0)">Activity <span class="btn-icon ic-right" style="margin-top:-15px">&raquo;</span></a>
-             <div class="map-menu-box" id="activity-menu"  style="padding:10px">
+           <a class="btn toggle" style="margin-left:-60px" id="activity-menu-toggle" href="javascript:void(0)">Activity <span class="btn-icon ic-right" style="padding-right:45px; margin-top:-12px;">&raquo;</span></a>
+             <div class="map-menu-box" id="activity-menu"  style="padding:10px; margin-left:-60px">
                <?php if (count($active_locations)>0):?>
                  <h5>Places</h5>
               <p>Most active places in the past 30 days</p>
@@ -78,15 +93,42 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
              
     				
       </div>
+
+
+
+
       <script type="text/javascript">
       $(document).ready(function(){
+        $("#share-map").click(function(){
+          //build the link
+          console.log(map);
+      		var myPoint = new OpenLayers.LonLat(parseFloat(map.center.lon), parseFloat(map.center.lat));
+        	var proj_900913 = new OpenLayers.Projection('EPSG:900913');
+        	var proj_4326 = new OpenLayers.Projection('EPSG:4326');
+      		myPoint.transform( proj_900913,proj_4326);
+    
+          console.log(myPoint);
+          var site = "<?php echo url::site()?>";
+          var start = "startTime="+$("#startDate").val();
+          var end = "endTime="+$("#endDate").val();
+          var lat = "lat="+myPoint.lat;
+          var lon = "lon="+myPoint.lon;
+          var zoom = "zoom="+map.zoom;
+          $("#share-map-link").toggle();
+          $("#activity-menu").hide();
+          $("#share-map-link").find(".link").html(site+"?"+start+"&"+end+"&"+lat+"&"+lon+"&"+zoom);
+        })
+        
+        
         $("a.datepick").click(function(){
           var day = parseInt($(this).attr("rel")) - (86400);
           var nextDay = parseInt(day) +(86400*2);
           var stop=false;
+          $("#activity-menu").find("li").removeClass("active");
+          $(this).parent().addClass("active");
           $("#startDate").find("option").each(function(i,e){
             var v = ($(e).attr("value"));
-            if (v>day && stop==false){
+            if (v>=day && stop==false){
               stop = true;
               $("#startDate").trigger('click');
               $("#startDate").val(v);
@@ -96,9 +138,8 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
           stop=false;
           $("#endDate").find("option").each(function(i,e){
             var v = ($(e).attr("value"));
-            if (v>nextDay && stop==false){
+            if (v>=nextDay && stop==false){
               $("#endDate").trigger('click');
-
               $("#endDate").val(v);
               $(e).select();
               stop = true;
@@ -107,7 +148,6 @@ body .rapidxwpr, div#mainmenu { margin:0; width:100%; min-width:960px; }
           })
     
           //set start date to day value
-    
           //set end date to day val + 1 day
           //trigger change handlers for start day and end day on map
           $("#startDate").trigger('change');

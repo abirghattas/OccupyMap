@@ -2970,4 +2970,7 @@ span.btn-icon { display:block; position:absolute; height:16px; width:16px; overf
         background-repeat: no-repeat;
         background-size:48px 48px;
       }
-      */
+
+#activity-menu .active {
+  background-color:#ffc;
+}

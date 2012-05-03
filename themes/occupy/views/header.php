@@ -173,6 +173,12 @@ if (isset($uri_segments))
          $("#check_youtube").change(function(){
 				   //do the youtube query, get json and prepopulate
           v_url = $("#check_youtube").val();
+          $("#incident_title").css("background-color","#ffc");
+          $("#incident_description").css("background-color","#ffc");
+          $("#incident_title").val("Loading...");
+          $("#incident_description").val("Loading...");
+
+
           if ((v_url.split("youtube.com").length >1 )|| (v_url.split("vimeo.com").length >1)) {
 					   $.ajax({
 					     url:"http://map.occupy.net:9494/video/"+v_url,
@@ -181,6 +187,10 @@ if (isset($uri_segments))
 					       $("#incident_title").val(data.title);
 					       $("#incident_description").val(data.url +" \n \n"+ data.description);
 					       $("input.video").first().val(v_url);
+                 $("#incident_title").css("background-color","#fff");
+                 $("#incident_description").css("background-color","#fff");
+
+					       
                 //set the date also.  would be great to prompt a location
 					     }
 					   })
@@ -205,6 +215,64 @@ if (isset($uri_segments))
           }
           
         })
+        
+        //javascript to parse query string
+        //http://stackoverflow.com/questions/901115/get-query-string-values-in-javascript
+        
+        
+        
+        var urlParams = {};
+        (function () {
+            var e,
+                a = /\+/g,  // Regex for replacing addition symbol with a space
+                r = /([^&=]+)=?([^&]*)/g,
+                d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
+                q = window.location.search.substring(1);
+
+            while (e = r.exec(q))
+               urlParams[d(e[1])] = d(e[2]);
+        })();
+        //we have a time interval - manipulate the timeline
+        if (urlParams["startTime"] > 0 && urlParams["endTime"] > 0) {
+          day = parseInt(urlParams["startTime"]);
+          nextDay = parseInt(urlParams["endTime"]);
+          stop =false;
+          $("#startDate").find("option").each(function(i,e){
+            var v = ($(e).attr("value"));
+            if (v>=day && stop==false){
+              stop = true;
+              $("#startDate").trigger('click');
+              $("#startDate").val(v);
+              $(e).select()
+            }
+          })
+          stop=false;
+          $("#endDate").find("option").each(function(i,e){
+            var v = ($(e).attr("value"));
+            if (v>=nextDay && stop==false){
+              $("#endDate").trigger('click');
+              $("#endDate").val(v);
+              $(e).select();
+              stop = true;
+            }
+          })        
+          $("#startDate").trigger('change');
+          $("#endDate").trigger('change');
+        }        
+        
+        if (urlParams["lat"] && urlParams["lon"] && urlParams["zoom"]){
+      		// Create a lat/lon object and center the map
+      		var myPoint = new OpenLayers.LonLat(parseFloat(urlParams["lon"]), parseFloat(urlParams["lat"]));
+        	var proj_900913 = new OpenLayers.Projection('EPSG:900913');
+        	var proj_4326 = new OpenLayers.Projection('EPSG:4326');
+      		myPoint.transform(proj_4326, proj_900913);
+
+      		// Display the map centered on a latitude and longitude
+      		map.setCenter(myPoint, parseInt(urlParams["zoom"]));
+          
+        }
+
+        
       })
       </script>			
 			<!-- user actions -->
@@ -257,3 +325,4 @@ if (isset($uri_segments))
 		<!-- main body -->
 		<div id="middle">
 			<div class="background layoutleft">
+
